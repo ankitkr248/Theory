@@ -1,0 +1,1 @@
+https://github.com/InterviewReady/system-design-resources?tab=readme-ov-file#distributed-logging
