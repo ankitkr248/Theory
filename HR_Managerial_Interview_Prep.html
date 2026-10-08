@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HR &amp; Managerial Interview Prep — Ankit Kumar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F4EF;
+    --panel:#FFFFFF;
+    --ink:#1E2530;
+    --ink-soft:#4B5563;
+    --line:#DDD8CC;
+    --accent:#2E5339;      /* deep pine — engineering/ops feel, not the usual clay/indigo */
+    --accent-soft:#E7EEE7;
+    --tag:#8A6E3D;         /* muted bronze for category labels */
+    --code-bg:#EFEAE0;
+    --shadow:0 1px 2px rgba(30,37,48,.06);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    font-size:16px;
+    line-height:1.6;
+  }
+  h1,h2,h3{
+    font-family:'Source Serif 4',Georgia,serif;
+    font-weight:700;
+    color:var(--ink);
+    letter-spacing:-0.01em;
+  }
+
+  /* ---------- Layout shell ---------- */
+  .shell{
+    display:grid;
+    grid-template-columns:280px minmax(0,780px);
+    justify-content:center;
+    gap:56px;
+    max-width:1180px;
+    margin:0 auto;
+    padding:48px 24px 120px;
+  }
+  @media (max-width:900px){
+    .shell{grid-template-columns:1fr; padding:28px 18px 80px;}
+    .sidebar{position:static !important; order:2; margin-top:40px;}
+  }
+
+  /* ---------- Header ---------- */
+  .masthead{
+    grid-column:1 / -1;
+    max-width:820px;
+    margin:0 auto 8px;
+    text-align:left;
+  }
+  .masthead .kicker{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;
+    color:var(--tag);
+    letter-spacing:0.03em;
+  }
+  .masthead h1{
+    font-size:clamp(28px,4vw,40px);
+    line-height:1.15;
+    margin:10px 0 10px;
+  }
+  .masthead p{
+    color:var(--ink-soft);
+    font-size:16px;
+    max-width:640px;
+    margin:0 0 28px;
+  }
+  .masthead .rule{
+    border:none;
+    border-top:1px solid var(--line);
+    margin:0 0 8px;
+  }
+
+  /* ---------- Sidebar / TOC ---------- */
+  .sidebar{
+    position:sticky;
+    top:32px;
+    align-self:start;
+    height:fit-content;
+  }
+  .search-wrap{
+    margin-bottom:22px;
+  }
+  .search-wrap input{
+    width:100%;
+    padding:10px 12px;
+    border:1px solid var(--line);
+    background:var(--panel);
+    border-radius:6px;
+    font-family:'Inter',sans-serif;
+    font-size:14px;
+    color:var(--ink);
+    outline:none;
+  }
+  .search-wrap input:focus{border-color:var(--accent);}
+  .search-wrap .hint{
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-top:6px;
+  }
+  .toc-section{margin-bottom:22px;}
+  .toc-section .toc-title{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    color:var(--tag);
+    letter-spacing:0.04em;
+    margin-bottom:8px;
+  }
+  .toc-section ul{
+    list-style:none;
+    margin:0;
+    padding:0;
+    border-left:1px solid var(--line);
+  }
+  .toc-section li a{
+    display:block;
+    padding:5px 0 5px 14px;
+    font-size:13.5px;
+    color:var(--ink-soft);
+    text-decoration:none;
+    border-left:2px solid transparent;
+    margin-left:-1px;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .toc-section li a:hover{
+    color:var(--accent);
+    border-left-color:var(--accent);
+  }
+  .toc-actions{
+    display:flex;
+    gap:8px;
+    margin-top:20px;
+  }
+  .toc-actions button{
+    flex:1;
+    font-family:'Inter',sans-serif;
+    font-size:12.5px;
+    padding:7px 8px;
+    border:1px solid var(--line);
+    background:var(--panel);
+    color:var(--ink-soft);
+    border-radius:6px;
+    cursor:pointer;
+  }
+  .toc-actions button:hover{border-color:var(--accent); color:var(--accent);}
+
+  /* ---------- Main content ---------- */
+  main{min-width:0;}
+  .category{
+    margin-bottom:14px;
+    padding-top:8px;
+  }
+  .category-head{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    margin:44px 0 18px;
+  }
+  .category-head:first-of-type{margin-top:8px;}
+  .category-head h2{
+    font-size:22px;
+    margin:0;
+  }
+  .category-head .count{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+    background:var(--code-bg);
+    padding:2px 8px;
+    border-radius:20px;
+  }
+  .category-note{
+    color:var(--ink-soft);
+    font-size:14.5px;
+    margin:-8px 0 20px;
+    max-width:640px;
+  }
+
+  details.qa{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:8px;
+    margin-bottom:10px;
+    box-shadow:var(--shadow);
+    overflow:hidden;
+  }
+  details.qa[open]{border-color:#C9D6C9;}
+  details.qa summary{
+    list-style:none;
+    cursor:pointer;
+    padding:15px 18px;
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:15.5px;
+    color:var(--ink);
+  }
+  details.qa summary::-webkit-details-marker{display:none;}
+  details.qa summary .num{
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:500;
+    font-size:12.5px;
+    color:var(--accent);
+    background:var(--accent-soft);
+    border-radius:5px;
+    padding:2px 7px;
+    margin-top:2px;
+    flex-shrink:0;
+  }
+  details.qa summary .chev{
+    margin-left:auto;
+    color:var(--ink-soft);
+    transition:transform .18s ease;
+    flex-shrink:0;
+    font-size:13px;
+    margin-top:2px;
+  }
+  details.qa[open] summary .chev{transform:rotate(90deg);}
+  .qa-body{
+    padding:0 18px 20px 52px;
+    color:var(--ink-soft);
+    font-size:15px;
+  }
+  .qa-body p{margin:0 0 12px;}
+  .qa-body p:last-child{margin-bottom:0;}
+  .qa-body strong{color:var(--ink); font-weight:600;}
+  .qa-body ul{margin:0 0 12px; padding-left:20px;}
+  .qa-body li{margin-bottom:5px;}
+  .qa-body .star-label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;
+    color:var(--tag);
+    letter-spacing:0.03em;
+    display:block;
+    margin-bottom:2px;
+  }
+  .qa-body .tailored-tag{
+    display:inline-block;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    color:var(--accent);
+    background:var(--accent-soft);
+    border-radius:4px;
+    padding:1px 6px;
+    margin-bottom:10px;
+  }
+
+  /* tips block */
+  .tips{
+    margin-top:48px;
+    padding:22px 24px;
+    background:var(--accent-soft);
+    border-left:3px solid var(--accent);
+    border-radius:6px;
+  }
+  .tips h3{
+    font-size:16px;
+    margin:0 0 10px;
+  }
+  .tips ul{margin:0; padding-left:20px;}
+  .tips li{margin-bottom:8px; color:var(--ink);}
+
+  .no-results{
+    display:none;
+    color:var(--ink-soft);
+    font-style:italic;
+    padding:40px 0;
+    text-align:center;
+  }
+
+  footer{
+    max-width:780px;
+    margin:60px auto 0;
+    padding-top:20px;
+    border-top:1px solid var(--line);
+    color:var(--ink-soft);
+    font-size:13px;
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="kicker">Interview Prep · Reference Sheet</div>
+  <h1>HR &amp; Managerial Interview Prep</h1>
+  <p>Senior Software Engineer — Java · Spring Boot · Distributed Systems. Answers are tailored to real projects from your CV (DMS, SSO/IAM, ML delivery prediction, WebRTC data calls, job scheduler, payment orchestrator) so they read as specific, not generic. Search below, or click any question to expand it.</p>
+  <hr class="rule">
+</div>
+
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="search-wrap">
+      <input type="text" id="searchBox" placeholder="Search questions or answers…">
+      <div class="hint">43 questions across 5 sections</div>
+    </div>
+
+    <div class="toc-section">
+      <div class="toc-title">01 · GENERAL HR</div>
+      <ul id="toc-1"></ul>
+    </div>
+    <div class="toc-section">
+      <div class="toc-title">02 · BEHAVIORAL (STAR)</div>
+      <ul id="toc-2"></ul>
+    </div>
+    <div class="toc-section">
+      <div class="toc-title">03 · SYSTEM DESIGN</div>
+      <ul id="toc-3"></ul>
+    </div>
+    <div class="toc-section">
+      <div class="toc-title">04 · MOTIVATION &amp; FIT</div>
+      <ul id="toc-4"></ul>
+    </div>
+    <div class="toc-section">
+      <div class="toc-title">05 · EXTRA PREP</div>
+      <ul id="toc-5"></ul>
+    </div>
+
+    <div class="toc-actions">
+      <button id="expandAll">Expand all</button>
+      <button id="collapseAll">Collapse all</button>
+    </div>
+  </aside>
+
+  <main>
+
+    <!-- ===================== SECTION 1 ===================== -->
+    <section class="category" id="sec-1">
+      <div class="category-head"><h2>General HR Questions</h2><span class="count">12</span></div>
+
+      <details class="qa" id="q1"><summary><span class="num">01</span><span>Tell me about yourself</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>I'm a Senior Software Engineer with 4+ years of experience building scalable backend systems in Java and Spring Boot, currently at Jubilant FoodWorks. I own end-to-end delivery of core logistics and platform systems — most recently the Delivery Management System, which handles rider allocation, order clubbing, and payouts for 400K+ daily orders across 25K+ riders.</p>
+          <p>Beyond logistics, I've built a centralized SSO/IAM platform used across 120+ tenant-aware services, an ML-based delivery time prediction service using ONNX Runtime, and a multi-provider payment orchestrator used by brands like Domino's and Dunkin'. I enjoy solving problems at the intersection of scale and reliability — designing systems that stay correct under concurrency and failure, not just under happy-path conditions.</p>
+          <p>Going forward, I'm looking for a role with more scope in distributed systems architecture and technical decision-making at a larger scale.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q2"><summary><span class="num">02</span><span>What are your current responsibilities?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <ul>
+            <li>Owning end-to-end design and delivery of backend microservices in Java/Spring Boot, from architecture through production rollout</li>
+            <li>Making system design decisions for new features — data modeling, failure handling, scaling strategy</li>
+            <li>Building and maintaining APIs/services handling high-volume operational data (GPS, orders, payouts)</li>
+            <li>Optimizing database and query performance under production load</li>
+            <li>Collaborating with product, frontend, and data teams on cross-functional delivery</li>
+            <li>Handling production incidents and post-incident follow-up</li>
+            <li>Reviewing code and mentoring junior engineers on the team</li>
+          </ul>
+          <p>Recent focus areas: the rider payout/incentive engine, the SSO/IAM rollout, and the ML delivery-time prediction service.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q3"><summary><span class="num">03</span><span>What project are you most proud of?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>The <strong>Delivery Management System (DMS)</strong> rider allocation and payout engine. The challenge was building allocation logic that stayed correct and fast at scale — ~58 GPS updates/sec flowing through Cassandra, Kafka, and MQTT — while supporting anti-spoof geofencing and dual routing providers with automatic failover.</p>
+          <p>I designed allocation as a chain of 9 rule classes and built the payout engine around 18+ incentive types composed with 20+ eligibility handlers across 4 Kafka consumers. What I'm proudest of isn't just the accuracy improvement (35%) — it's that we replaced opaque payout rejections with rider-facing non-eligibility remarks, which directly reduced support escalations and improved trust in the platform.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q4"><summary><span class="num">04</span><span>Tell me about a challenging problem you solved</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>On the SSO/IAM platform, the challenge was migrating 120+ services from duplicated per-service auth logic to a centralized system <strong>without downtime or breaking live traffic</strong>. A hard cutover was too risky given the blast radius.</p>
+          <p>I designed a three-mode rollout filter — off, shadow, and enforce — that let new auth logic validate silently against live production traffic before it started gating real requests. I paired this with an S3-backed offline decision cache so IAM outages wouldn't take down dependent services. This let us de-risk the rollout incrementally and catch discrepancies before they became incidents, and the resulting S2S auth library cut integration effort for other backend teams by 80%.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q5"><summary><span class="num">05</span><span>How do you handle production issues?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <ul>
+            <li><strong>Assess impact first</strong> — which services/users are affected, and how severely</li>
+            <li><strong>Root-cause using logs, dashboards, and traces</strong> — I don't guess; I look at what actually broke</li>
+            <li><strong>Mitigate or roll back immediately</strong> if there's a safe fast path to restore service</li>
+            <li><strong>Fix the root cause properly</strong> and deploy after testing — the rollback buys time, it isn't the fix</li>
+            <li><strong>Post-incident review</strong> — what alerting/logging gap let this reach production, and what would catch it earlier next time</li>
+          </ul>
+          <p>On the DMS routing layer, this pattern is literally built into the system — a circuit breaker automatically fails over from OSRM to Google Routes, which cut downtime by 40% without needing a human in the loop for the common case.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q6"><summary><span class="num">06</span><span>How do you handle disagreements in a team?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>I focus on the technical trade-off, not the person. I listen to the reasoning first, then evaluate options against concrete criteria — latency, maintainability, blast radius, how reversible the decision is. I bring data or a prototype where possible rather than arguing from opinion. If we're stuck, I default to the tech lead's call rather than let it become a stalemate — speed of decision matters more than winning the argument.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q7"><summary><span class="num">07</span><span>Why are you looking for a change?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>I've grown a lot in my current role — from owning individual services to leading system design across payouts, IAM, and ML-serving infrastructure. I'm now looking for an environment with larger-scale distributed systems and more ownership over architecture and technical direction, ideally somewhere with a strong engineering culture around scalability and reliability.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q8"><summary><span class="num">08</span><span>What are your strengths?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <ul>
+            <li>Designing systems that hold up under concurrency and partial failure (optimistic-lock retries, atomic conditional updates, circuit breakers)</li>
+            <li>Translating ambiguous business rules (payout slabs, incentive eligibility) into clean, configurable backend logic</li>
+            <li>Debugging production issues quickly using logs, execution plans, and monitoring</li>
+            <li>Taking end-to-end ownership from design through rollout, not just implementation</li>
+            <li>Mentoring engineers and raising code review standards across a team</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="qa" id="q9"><summary><span class="num">09</span><span>What are your weaknesses?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>Earlier in my career I'd sometimes go heads-down and try to fully solve a problem alone before looping others in. I've learned that surfacing a rough design early — even before it's polished — gets better outcomes and catches issues sooner. I now default to sharing design docs early and asking for input before I'm "done," which has improved both the quality of my designs and how fast we ship them.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q10"><summary><span class="num">10</span><span>Where do you see yourself in 3–5 years?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>I want to grow into a role with more architectural ownership — effectively a tech-lead track — where I'm setting technical direction for a domain, mentoring engineers, and still staying hands-on with the hardest parts of the system. I don't want to fully leave coding behind; I want influence <em>and</em> depth.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q11"><summary><span class="num">11</span><span>Why should we hire you?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>I bring production experience at real scale — systems handling 400K+ daily orders and 100K+ daily payment users — with a track record of shipping things that measurably move the needle (35% payout accuracy, 60% telecom cost reduction, 25% lift in successful transactions). I take ownership beyond my ticket, I communicate trade-offs clearly, and I've already mentored engineers and driven review standards on my current team. I'd bring that same ownership here from day one.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q12"><summary><span class="num">12</span><span>Do you have any questions for us?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <ul>
+            <li>What are the main technical or scaling challenges the team is currently working through?</li>
+            <li>How does the team approach system design reviews and architecture decisions?</li>
+            <li>What would success look like for this role in the first 6 months?</li>
+            <li>How does the org support engineering growth — architecture exposure, mentorship, learning time?</li>
+            <li>What's the on-call and incident-response culture like here?</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <!-- ===================== SECTION 2 ===================== -->
+    <section class="category" id="sec-2">
+      <div class="category-head"><h2>Behavioral (STAR Format)</h2><span class="count">12</span></div>
+      <p class="category-note">Each answer follows Situation → Task → Action → Result so it's easy to adapt on the fly.</p>
+
+      <details class="qa" id="q13"><summary><span class="num">13</span><span>Tell me about a project where you took end-to-end ownership</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <span class="star-label">SITUATION</span>
+          <p>Payouts on the DMS were historically calculated with static rules and little visibility for operations to audit rider earnings.</p>
+          <span class="star-label">TASK</span>
+          <p>Design a payout/incentive system that was accurate, auditable, and configurable without code changes.</p>
+          <span class="star-label">ACTION</span>
+          <p>I owned it from design to deployment — worked with product/ops to define incentive types and eligibility rules, built the engine as 18+ incentive types composed with 20+ eligibility handlers across 4 Kafka consumers, and made non-eligibility reasons visible to riders instead of silent rejections.</p>
+          <span class="star-label">RESULT</span>
+          <p>Payment accuracy improved 35%, and it earned a Chairperson Award for the accuracy improvement alongside operational cost reduction.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q14"><summary><span class="num">14</span><span>Describe a situation where a production issue occurred and how you handled it</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <span class="star-label">SITUATION</span>
+          <p>The routing layer for rider allocation depended on a single external routing provider; any provider degradation risked stalling allocation for thousands of riders.</p>
+          <span class="star-label">TASK</span>
+          <p>Make the system resilient to routing-provider failures without manual intervention.</p>
+          <span class="star-label">ACTION</span>
+          <p>I put OSRM as the primary provider and Google Routes as a fallback, wrapped both behind a circuit breaker so failures triggered automatic failover rather than cascading into allocation delays.</p>
+          <span class="star-label">RESULT</span>
+          <p>This cut downtime by 40% and removed a single point of failure from a system processing hundreds of thousands of orders daily.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q15"><summary><span class="num">15</span><span>Tell me about a complex system you designed or improved</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <span class="star-label">SITUATION</span>
+          <p>Delivery ETAs relied on a single end-to-end estimate, which didn't reflect where time was actually being lost (prep vs. transit vs. last-mile).</p>
+          <span class="star-label">TASK</span>
+          <p>Build a more accurate, explainable prediction system feeding the customer-facing delivery promise.</p>
+          <span class="star-label">ACTION</span>
+          <p>I built an ONNX Runtime inference service around a multi-output regression model that split the prediction into prep, transit, and last-mile segments, and mirrored the offline Python training pipeline feature-for-feature (haversine distance, cyclical time encoding, per-store encoding, a festival calendar) so training and serving stayed consistent.</p>
+          <span class="star-label">RESULT</span>
+          <p>85–95% per-segment accuracy at 500 orders per batch call, now feeding SLA reporting — and the approach won our company-wide hackathon in 2026.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q16"><summary><span class="num">16</span><span>How do you ensure reliability in backend services?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <ul>
+            <li><strong>Fault tolerance by design</strong> — timeouts, retries, circuit breakers on every external dependency (this is literally how the DMS routing failover works)</li>
+            <li><strong>Concurrency safety</strong> — optimistic-lock retries and atomic conditional updates so two writers can never both "win" (used in both the Loyalty ledger and the Job Scheduler)</li>
+            <li><strong>Observability</strong> — structured logging, metrics, and alerts so issues surface before customers notice</li>
+            <li><strong>Testing discipline</strong> — unit/integration tests, with an 80% coverage gate enforced on the DMS</li>
+            <li><strong>Safe rollout</strong> — shadow-mode validation against live traffic before a change is allowed to affect real requests (used in the SSO rollout)</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="qa" id="q17"><summary><span class="num">17</span><span>Describe a time when you improved system performance or scalability</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <span class="star-label">SITUATION</span>
+          <p>The Job Scheduling platform had per-service dashboards making repeated database reads, adding load during peak traffic.</p>
+          <span class="star-label">TASK</span>
+          <p>Reduce database strain without sacrificing dashboard freshness.</p>
+          <span class="star-label">ACTION</span>
+          <p>I introduced tiered Redis caching in front of the dashboard reads and made terminal-state writes race-proof with atomic conditional updates so retries couldn't cause duplicate processing.</p>
+          <span class="star-label">RESULT</span>
+          <p>Cut repeat database reads on dashboards by an estimated 60–70%, and consolidating per-service Quartz instances into one dispatch platform cut new job onboarding from a multi-day build to config-driven registration (~70% less effort).</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q18"><summary><span class="num">18</span><span>Tell me about a time you disagreed with a design decision</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <span class="star-label">SITUATION</span>
+          <p>For the payment orchestrator, there was a proposal to keep gateway-selection logic close to the client for faster iteration.</p>
+          <span class="star-label">TASK</span>
+          <p>I was concerned this would duplicate business rules across clients and cause inconsistent behavior across PSPs (PayU, Paytm, Razorpay).</p>
+          <span class="star-label">ACTION</span>
+          <p>I proposed modeling each PSP as a pluggable state machine behind one internal API, keeping selection and retry logic entirely server-side.</p>
+          <span class="star-label">RESULT</span>
+          <p>The team agreed; this became the pattern adopted across brands (Domino's, Dunkin'), and a later gateway-analysis module built on this consistency lifted successful transactions by 25%.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q19"><summary><span class="num">19</span><span>Tell me about a time you mentored someone</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <span class="star-label">SITUATION</span>
+          <p>A junior engineer on my team was struggling to debug production issues and reason about query performance.</p>
+          <span class="star-label">TASK</span>
+          <p>Get them to a point where they could independently diagnose and fix these issues.</p>
+          <span class="star-label">ACTION</span>
+          <p>I paired with them on real incidents, walked through how to read execution plans and correlate logs with monitoring dashboards, and deliberately let them propose the fix in design discussions rather than handing them the answer.</p>
+          <span class="star-label">RESULT</span>
+          <p>Within a few months they were resolving similar issues independently, and I've since made this pairing approach part of how I onboard engineers onto my systems.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q20"><summary><span class="num">20</span><span>Tell me about a failure</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <span class="star-label">SITUATION</span>
+          <p>Early in my career, I shipped a feature with a query that wasn't properly indexed, which increased latency on a reporting API used by operations.</p>
+          <span class="star-label">TASK</span>
+          <p>Fix it fast — the report was actively used by a downstream team.</p>
+          <span class="star-label">ACTION</span>
+          <p>I diagnosed it via the execution plan, added the missing index, and fixed the query. More importantly, I added a query-review step to our deployment checklist so this class of issue would get caught before shipping, not after.</p>
+          <span class="star-label">RESULT</span>
+          <p>Latency was resolved within hours, and the review step has since caught similar issues before they reached production — the real fix was procedural, not just technical.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q21"><summary><span class="num">21</span><span>Tell me about a time when multiple teams were involved in a project</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <span class="star-label">SITUATION</span>
+          <p>Integrating a new payment provider into the Unified Payment Service required coordination across backend, frontend, QA, and the external gateway's team.</p>
+          <span class="star-label">TASK</span>
+          <p>Ship a reliable integration covering card, netbanking, UPI, OTP, and refund flows without disrupting existing PSPs.</p>
+          <span class="star-label">ACTION</span>
+          <p>I defined the API contract early with frontend, clarified gateway-specific edge cases (retryable vs. non-retryable failure codes) with the payments team, and ran structured test cycles with QA covering failure scenarios, not just happy paths.</p>
+          <span class="star-label">RESULT</span>
+          <p>The integration launched cleanly and is now live for 100,000+ daily users, with webhook reconciliation built in via Elasticsearch-backed search for auditability.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q22"><summary><span class="num">22</span><span>How do you ensure clear communication between teams?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <ul>
+            <li><strong>Documented contracts</strong> — API shapes, data formats, and edge cases written down, not just discussed verbally</li>
+            <li><strong>Short, focused syncs</strong> — enough to surface blockers early, not status theater</li>
+            <li><strong>Proactive risk-flagging</strong> — I'd rather over-communicate a risk early than let a team be surprised by it later</li>
+          </ul>
+        </div>
+      </details>
+
+      <details class="qa" id="q23"><summary><span class="num">23</span><span>Have you ever had to mentor or guide junior developers?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>Yes — regularly, through code review, pairing, and design discussions. I try to ask questions that lead them to the answer rather than just providing it, especially around debugging and query optimization, since that builds a skill they'll reuse rather than a one-off fix.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q24"><summary><span class="num">24</span><span>How do you review code or maintain code quality in a team?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>I look at correctness and edge cases first, then readability, performance, error handling, and consistency with existing patterns. I check that tests actually cover the changed behavior, not just that tests exist. When I notice a recurring pattern that could be improved codebase-wide, I raise it as a team discussion rather than relitigating it review-by-review — that's how the 80% coverage gate and review standards got established on the DMS team.</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- ===================== SECTION 3 ===================== -->
+    <section class="category" id="sec-3">
+      <div class="category-head"><h2>System Design &amp; Technical Depth</h2><span class="count">5</span></div>
+
+      <details class="qa" id="q25"><summary><span class="num">25</span><span>How do you handle high-traffic backend systems?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <ul>
+            <li><strong>Stateless services</strong> behind load balancers for horizontal scaling</li>
+            <li><strong>Data-layer optimization</strong> — indexing, query tuning, Redis caching to keep the database off the hot path</li>
+            <li><strong>Async processing</strong> for anything non-critical-path, via Kafka/queues</li>
+            <li><strong>Strong observability</strong> so traffic spikes are visible before they become incidents</li>
+          </ul>
+          <p>On the DMS, this combination is what lets us sustain ~58 GPS updates/sec across 25K+ riders without allocation lag.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q26"><summary><span class="num">26</span><span>How do you design scalable microservices?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>Clear domain boundaries (payments, rider management, IAM each own their data), stateless services for horizontal scaling, event-driven communication to reduce coupling, and per-service database ownership. I add circuit breakers and retries at every service boundary so failure in one service degrades gracefully instead of cascading — this is the same principle behind the DMS's dual-routing-provider failover.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q27"><summary><span class="num">27</span><span>How do you ensure data consistency in distributed systems?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>It depends on the operation's criticality. For payments, I lean on strong consistency and transactional guarantees. For most workflows, I use eventual consistency via event-driven updates, backed by idempotent APIs (so retries can't double-process) and reliable message delivery through queues. The Loyalty ledger is a good example — transfers redeem the source card and mint a new one under optimistic-lock retry, so concurrent wallet writes can't corrupt state even without a full distributed transaction.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q28"><summary><span class="num">28</span><span>How do you handle real-time updates like rider status or notifications?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>Backend services publish state-change events (location, delivery status, assignment) into a stream, which decouples producers from consumers and lets the system scale independently on each side. For direct real-time channels, I've built this at the transport layer too — the Data Call service uses a WebRTC signalling layer over Netty-SocketIO for offer/answer/ICE relay, with an Opus-only, video-disabled profile to keep it viable on constrained mobile data, which cut telecom costs by 60% (~INR 1.3 crore/year) for 50K+ users.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q29"><summary><span class="num">29</span><span>Tell me about a system you built that impacted business metrics</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>The distance-based payout and incentive system. Before it, payout calculations were opaque and needed manual reconciliation by operations. I built configurable slab-based payout logic with auditable aggregation and dashboard APIs, which improved rider-earnings transparency, cut manual reconciliation effort, and let ops teams adjust payout rules without a code deploy — directly improving both operational efficiency and payment accuracy (35%).</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- ===================== SECTION 4 ===================== -->
+    <section class="category" id="sec-4">
+      <div class="category-head"><h2>Motivation &amp; Culture Fit</h2><span class="count">5</span></div>
+
+      <details class="qa" id="q30"><summary><span class="num">30</span><span>Why are you looking for a change?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>I've had strong learning and growth in my current role — from IC to owning system design across payouts, IAM, and ML-serving. I'm now looking for larger-scale technical challenges and more architectural ownership, ideally in an org with a strong engineering culture around scale and reliability.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q31"><summary><span class="num">31</span><span>Why do you want to join our company?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <span class="tailored-tag">Customize per company</span>
+          <p>Reference something specific about their engineering scale, product, or public engineering blog/talk. What draws me is the scale and reliability bar of the systems you're building. My background is in exactly this kind of problem — high-throughput, real-time, distributed systems — and I want to keep working at that intersection while growing into more architectural ownership.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q32"><summary><span class="num">32</span><span>What kind of work environment do you prefer?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>One where engineers own the systems they build end-to-end, technical discussions are encouraged rather than top-down mandated, and design decisions get revisited and improved over time rather than left as quick fixes that calcify.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q33"><summary><span class="num">33</span><span>What motivates you as an engineer?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>Solving problems where the engineering decision has a visible, measurable business outcome — like seeing a payout accuracy number move, or a cost line drop because of a codec choice. I also enjoy the depth side: making a system correct under concurrency and failure, not just under the happy path.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q34"><summary><span class="num">34</span><span>What are your salary expectations?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>I'm primarily looking for the right role and growth opportunity. Based on my experience and current market standards for a Senior Software Engineer, I'd expect a competitive package — but I'm open to discussing the full picture: role scope, growth trajectory, and learning opportunities, alongside compensation.</p>
+          <p><strong>If pushed for a number:</strong> "Based on my experience and market benchmarks, I'd expect something in the range of X–Y, but I'm flexible depending on the role and responsibilities."</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- ===================== SECTION 5 ===================== -->
+    <section class="category" id="sec-5">
+      <div class="category-head"><h2>Additional Prep — Not in Original Set</h2><span class="count">9</span></div>
+      <p class="category-note">Commonly asked in senior-level HR/managerial rounds. Prepare short outlines rather than memorized scripts for these.</p>
+
+      <details class="qa" id="q35"><summary><span class="num">35</span><span>Tell me about a time you had to make a decision with incomplete information</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>Frame this around a real ambiguity — e.g., defining payout edge cases for multi-order deliveries before all operational rules were finalized. Emphasize: you made a reasonable default assumption, built in configurability so it could change without a redeploy, and validated with stakeholders early rather than waiting for perfect clarity.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q36"><summary><span class="num">36</span><span>How do you prioritize when you have multiple competing deadlines?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>Talk about assessing business impact and blast radius first (a production-facing payout bug vs. a nice-to-have dashboard feature), communicating trade-offs to stakeholders early rather than silently slipping a deadline, and negotiating scope before negotiating timeline.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q37"><summary><span class="num">37</span><span>Tell me about a time you had to give difficult feedback to a peer or teammate</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>Keep this behavioral and STAR-based — focus on being specific and behavior-based rather than personal, timing the feedback close to the event, and following up to confirm it landed constructively.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q38"><summary><span class="num">38</span><span>How do you approach learning a new technology or unfamiliar part of the codebase quickly?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>You could reference the ML delivery-prediction project — going from an unfamiliar ML-serving stack (ONNX Runtime, XGBoost) to a production inference service by first understanding the offline training pipeline in detail before writing serving code, to avoid train/serve skew.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q39"><summary><span class="num">39</span><span>Describe a time you had to push back on a deadline or scope</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>Use a real or illustrative example: propose a phased rollout (like the shadow-mode SSO rollout) instead of an all-or-nothing deadline, so you protect reliability without simply saying "no."</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q40"><summary><span class="num">40</span><span>How do you handle ambiguity in requirements from product/business teams?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>Emphasize collaborative clarification: ask targeted questions to convert ambiguity into concrete edge cases (e.g., defining payout rules for multi-order deliveries with product/ops), propose a reasonable default, and build in configurability so business logic can evolve without engineering being the bottleneck.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q41"><summary><span class="num">41</span><span>What's a technical decision you'd make differently if you could redo it?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>Prepare a genuine, specific example — reviewers respond well to real self-awareness here. A good structure: what you chose, why it seemed right then, what you learned, and what you'd do differently (or what safeguard you now build in by default because of it).</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q42"><summary><span class="num">42</span><span>How do you stay current with new technologies and engineering practices?</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>You can honestly mention your use of AI-assisted development tools (Claude Code, Cursor, GitHub Copilot) as part of your daily workflow — for code generation, review, and test scaffolding — as an example of adopting new tooling deliberately rather than resisting it, plus reading engineering blogs / following system design discussions relevant to your domain.</p>
+        </div>
+      </details>
+
+      <details class="qa" id="q43"><summary><span class="num">43</span><span>Tell me about a time you had to say no to a stakeholder request</span><span class="chev">▸</span></summary>
+        <div class="qa-body">
+          <p>Good opportunities: pushing back on frontend-only business logic (see Q18) or negotiating phased rollout instead of a risky big-bang deploy. Frame it as protecting a shared long-term interest (maintainability, reliability), not just personal preference.</p>
+        </div>
+      </details>
+    </section>
+
+    <p class="no-results" id="noResults">No questions match your search.</p>
+
+    <div class="tips">
+      <h3>Quick prep tips</h3>
+      <ul>
+        <li><strong>Have 3–4 "anchor stories"</strong> (DMS payout engine, SSO shadow rollout, ETA/ML service, WebRTC cost reduction) that you can adapt to answer almost any behavioral question — ownership, failure, conflict, mentoring, scale — by choosing which part of the story to emphasize.</li>
+        <li><strong>Always end technical answers with impact</strong> — a number, a business outcome, or what it unblocked for another team.</li>
+        <li><strong>For "why leaving" questions</strong>, keep it forward-looking (what you want next) rather than backward-looking (what's wrong with current role).</li>
+      </ul>
+    </div>
+
+    <footer>Prepared for Ankit Kumar · Senior Software Engineer interview prep</footer>
+  </main>
+</div>
+
+<script>
+  // Build TOC from DOM
+  const sectionMap = {1:'toc-1',2:'toc-2',3:'toc-3',4:'toc-4',5:'toc-5'};
+  Object.keys(sectionMap).forEach(secNum=>{
+    const sec = document.getElementById('sec-'+secNum);
+    const list = document.getElementById(sectionMap[secNum]);
+    sec.querySelectorAll('details.qa').forEach(d=>{
+      const label = d.querySelector('summary span:nth-child(2)').textContent;
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = '#'+d.id;
+      a.textContent = label;
+      a.addEventListener('click', ()=>{ d.open = true; });
+      li.appendChild(a);
+      list.appendChild(li);
+    });
+  });
+
+  // Expand / collapse all
+  document.getElementById('expandAll').addEventListener('click', ()=>{
+    document.querySelectorAll('details.qa').forEach(d=>d.open = true);
+  });
+  document.getElementById('collapseAll').addEventListener('click', ()=>{
+    document.querySelectorAll('details.qa').forEach(d=>d.open = false);
+  });
+
+  // Search / filter
+  const searchBox = document.getElementById('searchBox');
+  const noResults = document.getElementById('noResults');
+  searchBox.addEventListener('input', ()=>{
+    const q = searchBox.value.trim().toLowerCase();
+    let anyVisible = false;
+    document.querySelectorAll('.category').forEach(cat=>{
+      let catHasVisible = false;
+      cat.querySelectorAll('details.qa').forEach(d=>{
+        const text = d.textContent.toLowerCase();
+        const match = q === '' || text.includes(q);
+        d.style.display = match ? '' : 'none';
+        if(match){ catHasVisible = true; anyVisible = true; }
+        if(match && q !== ''){ d.open = true; } else if(q===''){ d.open = false; }
+      });
+      cat.style.display = catHasVisible ? '' : 'none';
+    });
+    noResults.style.display = anyVisible ? 'none' : 'block';
+  });
+</script>
+
+</body>
+</html>

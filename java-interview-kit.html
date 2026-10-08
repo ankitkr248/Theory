@@ -1,0 +1,913 @@
+<title>Java 9–25 Interview Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+:root{
+  --bg:#F3F5F1; --surface:#FFFFFF; --surface-2:#E9ECE6; --code-bg:#F7F8F5;
+  --ink:#14181A; --ink-2:#485052; --ink-3:#6F7779; --rule:#D8DCD5; --rule-2:#C4C9BF;
+  --accent:#B8450A; --accent-2:#0F5A62; --accent-soft:rgba(184,69,10,.09);
+  --good:#1C6A47; --warn:#8E5D06;
+  --c-kw:#9B3A05; --c-type:#0F5A62; --c-str:#2A6329; --c-num:#6B44A0; --c-com:#7A8280; --c-ann:#7A5A18;
+  --shadow:0 1px 2px rgba(20,24,26,.05), 0 6px 20px -12px rgba(20,24,26,.18);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E1113; --surface:#161A1C; --surface-2:#1D2224; --code-bg:#0A0D0E;
+  --ink:#E7E9E5; --ink-2:#A6AEAD; --ink-3:#79817F; --rule:#272D30; --rule-2:#39413F;
+  --accent:#FF8B45; --accent-2:#54C0CB; --accent-soft:rgba(255,139,69,.12);
+  --good:#5FC492; --warn:#E3AC46;
+  --c-kw:#FF9C63; --c-type:#69C8D2; --c-str:#93CE82; --c-num:#BEA6F2; --c-com:#6E7674; --c-ann:#DDB268;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -14px rgba(0,0,0,.8);
+}}
+:root[data-theme="dark"]{
+  --bg:#0E1113; --surface:#161A1C; --surface-2:#1D2224; --code-bg:#0A0D0E;
+  --ink:#E7E9E5; --ink-2:#A6AEAD; --ink-3:#79817F; --rule:#272D30; --rule-2:#39413F;
+  --accent:#FF8B45; --accent-2:#54C0CB; --accent-soft:rgba(255,139,69,.12);
+  --good:#5FC492; --warn:#E3AC46;
+  --c-kw:#FF9C63; --c-type:#69C8D2; --c-str:#93CE82; --c-num:#BEA6F2; --c-com:#6E7674; --c-ann:#DDB268;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -14px rgba(0,0,0,.8);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,sans-serif;font-size:16px;line-height:1.62;
+  -webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:Archivo,"Helvetica Neue",Arial,sans-serif;text-wrap:balance;margin:0;line-height:1.16}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+code,pre{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+p code,li code,td code,h3 code,h4 code{background:var(--surface-2);border-radius:3px;padding:.08em .34em;font-size:.86em}
+.wrap{max-width:800px;margin:0 auto;padding:0 32px}
+
+/* hero */
+.hero{padding:66px 0 40px}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 18px}
+h1{font-size:clamp(36px,5.6vw,56px);font-weight:800;letter-spacing:-.035em}
+.lede{font-size:18px;color:var(--ink-2);max-width:60ch;margin:20px 0 0}
+.hero-note{margin-top:22px;padding:14px 18px;border:1px solid var(--rule);border-left:3px solid var(--good);
+  border-radius:6px;background:var(--surface);font-size:14.5px;color:var(--ink-2);max-width:62ch}
+.hero-note b{color:var(--ink);font-weight:600}
+
+/* toolbar */
+.toolbar{position:sticky;top:0;z-index:20;background:var(--bg);
+  background:color-mix(in srgb, var(--bg) 90%, transparent);backdrop-filter:blur(10px);
+  border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:11px 0;margin-top:34px}
+.tb{max-width:800px;margin:0 auto;padding:0 32px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+#search{flex:1 1 180px;min-width:150px;padding:7px 11px;border:1px solid var(--rule-2);border-radius:6px;
+  background:var(--surface);color:var(--ink);font-family:"IBM Plex Mono",monospace;font-size:12.5px}
+.chip{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;
+  padding:5px 9px;border:1px solid var(--rule-2);border-radius:999px;background:transparent;color:var(--ink-3);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip:hover{border-color:var(--ink-3)}
+#toggleAll{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;
+  padding:5px 10px;border:1px solid var(--accent);color:var(--accent);background:transparent;border-radius:6px;cursor:pointer}
+#count{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3);margin-left:auto;white-space:nowrap}
+
+/* card */
+.deck{display:flex;flex-direction:column;gap:20px;padding:38px 0 0}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:10px;padding:22px 24px 24px;
+  box-shadow:var(--shadow)}
+.card.hidden{display:none}
+.c-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:11px}
+.num{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.topic{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--ink-2);background:var(--surface-2);padding:3px 8px;border-radius:4px}
+.ver{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.08em;color:var(--accent);
+  border:1px solid var(--accent);padding:2px 7px;border-radius:999px}
+.freq{display:flex;gap:3px;margin-left:auto;align-items:center}
+.freq i{width:6px;height:6px;border-radius:50%;background:var(--rule-2);display:block}
+.freq i.on{background:var(--accent)}
+.q{font-size:20px;font-weight:700;letter-spacing:-.022em;margin-bottom:12px;max-width:56ch}
+.q code{font-size:.9em}
+.reveal{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+  background:transparent;border:1px solid var(--rule-2);color:var(--ink-3);border-radius:5px;padding:4px 10px;
+  cursor:pointer;margin-bottom:4px}
+.reveal:hover{color:var(--ink);border-color:var(--ink-3)}
+.answer{padding-top:14px}
+.card.collapsed .answer{display:none}
+.a{color:var(--ink-2);margin:0 0 16px;max-width:66ch}
+.a strong,.a b{color:var(--ink);font-weight:600}
+
+.trap{border:1px solid var(--warn);border-radius:7px;padding:12px 15px;margin:0 0 16px;
+  background:color-mix(in srgb, var(--warn) 7%, transparent)}
+.trap-l{font-family:"IBM Plex Mono",monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--warn);display:block;margin-bottom:5px}
+.trap p{margin:0;font-size:14.5px;color:var(--ink-2);max-width:64ch}
+.trap strong{color:var(--ink)}
+
+.fus{margin-top:18px;padding-top:16px;border-top:1px solid var(--rule);display:flex;flex-direction:column;gap:15px}
+.fus::before{content:"Follow-ups they will hit you with";font-family:"IBM Plex Mono",monospace;font-size:9.5px;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3)}
+.fu{border-left:2px solid var(--accent);padding-left:14px}
+.fu h4{font-size:14.5px;font-weight:700;margin-bottom:4px}
+.fu p{margin:0;font-size:14.5px;color:var(--ink-2);max-width:64ch}
+.fu strong{color:var(--ink)}
+
+/* code */
+.codeblock{margin:0 0 12px;border:1px solid var(--rule);border-radius:7px;overflow:hidden;background:var(--code-bg)}
+.codeblock:last-child{margin-bottom:0}
+.cb-bar{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;
+  border-bottom:1px solid var(--rule);background:var(--surface-2)}
+.cb-lang{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3)}
+.cb-copy{font-family:"IBM Plex Mono",monospace;font-size:10.5px;background:transparent;border:1px solid var(--rule-2);
+  color:var(--ink-3);border-radius:4px;padding:2px 8px;cursor:pointer}
+.cb-copy:hover{color:var(--ink);border-color:var(--ink-3)}
+.cb-copy.done{color:var(--good);border-color:var(--good)}
+.codeblock pre{margin:0;padding:14px 16px;overflow-x:auto;font-size:12.8px;line-height:1.66;tab-size:4}
+.codeblock code{color:var(--ink)}
+.tok-kw{color:var(--c-kw);font-weight:500}.tok-type{color:var(--c-type)}.tok-str{color:var(--c-str)}
+.tok-num{color:var(--c-num)}.tok-com{color:var(--c-com);font-style:italic}.tok-ann{color:var(--c-ann)}
+
+/* jumps table */
+.tablewrap{overflow-x:auto;border:1px solid var(--rule);border-radius:8px;margin-bottom:16px}
+table.jumps{width:100%;border-collapse:collapse;font-size:14px;min-width:520px}
+table.jumps td{padding:12px 14px;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink-2)}
+table.jumps tr:last-child td{border-bottom:0}
+td.j{font-family:Archivo,sans-serif;font-weight:800;font-size:15px;color:var(--ink);white-space:nowrap;width:1%;
+  font-variant-numeric:tabular-nums}
+td.jt{font-family:"IBM Plex Mono",monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--accent);white-space:nowrap;width:1%}
+
+/* rapid fire */
+.rapid{padding:60px 0 0;border-top:1px solid var(--rule);margin-top:52px}
+.rapid h2{font-size:27px;font-weight:800;letter-spacing:-.03em;margin-bottom:10px}
+.rapid > p{color:var(--ink-2);max-width:60ch;margin:0 0 26px}
+.rfs{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1px;
+  border:1px solid var(--rule);border-radius:9px;overflow:hidden;background:var(--rule)}
+.rf{padding:14px 18px;background:var(--surface)}
+.rq{margin:0 0 4px;font-weight:600;font-size:14.5px}
+.ra{margin:0;font-size:14px;color:var(--ink-2)}
+.foot{padding:46px 0 80px;color:var(--ink-3);font-size:13.5px;max-width:62ch}
+.foot p{margin:0 0 10px}
+.kbd{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.05em}
+@media (max-width:640px){
+  .wrap,.tb{padding:0 18px}
+  .card{padding:18px 16px 20px}
+  .freq{margin-left:0}
+  .rfs{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+.card{scroll-margin-top:70px}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">Senior engineer · ~5 years · Java 9 → 25</p>
+    <h1>What they'll actually ask you</h1>
+    <p class="lede">22 questions covering the language and library changes from Java 9 to 25 — the parts a
+    senior interview actually probes. Each card is the question as it gets asked, the answer worth giving, the code,
+    and the follow-up that separates a memorised answer from a used one.</p>
+    <div class="hero-note"><b>The 6 three-dot cards are the ones to know cold.</b> Records, pattern matching and
+    virtual threads come up in almost every Java interview at this level; the rest is depth you deploy when the
+    conversation goes there.</div>
+  </header>
+</div>
+
+<div class="toolbar">
+  <div class="tb">
+    <input id="search" type="search" placeholder="Search…  ( / )" aria-label="Search questions">
+    <div class="chips" role="group" aria-label="Filter by topic"><button class="chip" data-topic="Language" aria-pressed="false">Language</button><button class="chip" data-topic="Collections &amp; Streams" aria-pressed="false">Collections &amp; Streams</button><button class="chip" data-topic="Concurrency" aria-pressed="false">Concurrency</button><button class="chip" data-topic="Runtime &amp; JVM" aria-pressed="false">Runtime &amp; JVM</button><button class="chip" data-topic="Migration" aria-pressed="false">Migration</button></div>
+    <button id="toggleAll" type="button" aria-pressed="false">Hide all answers</button>
+    <span id="count"></span>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="deck"><article class="card" data-topic="Language" data-freq="3" data-search="explain virtual threads. when would you actually use them? a virtual thread is a java.lang.thread scheduled by the jvm instead of the os. it costs roughly an object to create rather than ~1&amp;nbsp;mb of stack, and it is mounted on a small pool of platform carrier threads only while it is running — when it blocks, the jvm parks the continuation on the heap and hands the carrier to someone else. the point is not that they are faster; it is that plain blocking, thread-per-request code now scales to hundreds of thousands of concurrent i/o operations without a reactive rewrite. use them for i/o-bound concurrency. do not use them for cpu-bound work — you still have only n cores, so a fixed pool is still correct there. // the executor is a scope: close() waits for every task to finish
+try (var executor = executors.newvirtualthreadpertaskexecutor()) {
+    for (var request : requests) {
+        executor.submit(() -&gt; handle(request));      // blocking code inside is fine
+    }
+}
+
+thread.ofvirtual().name(&quot;worker&quot;).start(() -&gt; handle(req));
+thread.startvirtualthread(() -&gt; audit(event));
+
+// 10,000 virtual threads each sleeping 50ms — measured on jdk 25.0.3:
+//   summed in 173ms.  10,000 platform threads would need gigabytes of stack. language" id="q1"><header class="c-head"><div class="c-meta"><span class="num">01</span><span class="topic">Language</span><span class="ver">Java 21</span><span class="freq" title="Asked almost every time"><i class="on"></i><i class="on"></i><i class="on"></i></span></div><h3 class="q">Explain virtual threads. When would you actually use them?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">A virtual thread is a <code>java.lang.Thread</code> scheduled by the JVM instead of the OS. It costs roughly an object to create rather than ~1&nbsp;MB of stack, and it is <em>mounted</em> on a small pool of platform carrier threads only while it is running — when it blocks, the JVM parks the continuation on the heap and hands the carrier to someone else. <br><br>The point is not that they are faster; it is that plain blocking, thread-per-request code now scales to hundreds of thousands of concurrent I/O operations without a reactive rewrite. Use them for <strong>I/O-bound</strong> concurrency. Do <strong>not</strong> use them for CPU-bound work — you still have only N cores, so a fixed pool is still correct there.</p><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">java</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">// The executor is a scope: close() waits for every task to finish
+try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+    for (var request : requests) {
+        executor.submit(() -&gt; handle(request));      // blocking code inside is fine
+    }
+}
+
+Thread.ofVirtual().name(&quot;worker&quot;).start(() -&gt; handle(req));
+Thread.startVirtualThread(() -&gt; audit(event));
+
+// 10,000 virtual threads each sleeping 50ms — measured on JDK 25.0.3:
+//   summed in 173ms.  10,000 platform threads would need gigabytes of stack.</code></pre></figure><div class="fus"><div class="fu"><h4>Why shouldn't you pool virtual threads?</h4><p>Because pooling exists to ration an expensive resource, and virtual threads are the cheap one — pooling them is like pooling an <code>Integer</code>. Worse, it reintroduces exactly the ceiling you removed. Pool the scarce thing <em>behind</em> them: the database connection, the rate-limited API.</p></div><div class="fu"><h4>What is pinning?</h4><p>Before Java 24, a virtual thread that blocked inside a <code>synchronized</code> block could not unmount, so it held its carrier thread hostage. With a carrier pool sized to the core count, a handful of those will stall your whole application. On Java 21–23 the fix was to convert hot paths to <code>ReentrantLock</code>; <strong>JEP 491 in Java 24 removed the limitation for object monitors</strong>. Native frames (JNI / FFM downcalls) still pin. Diagnose with <code>-Djdk.tracePinnedThreads=full</code> or the <code>jdk.VirtualThreadPinned</code> JFR event.</p></div><div class="fu"><h4>What about ThreadLocal?</h4><p>A million threads means a million copies — thread-locals used as caches become a memory problem rather than an optimisation. That is the problem <strong>scoped values</strong> (final in Java 25) were designed to solve.</p></div><div class="fu"><h4>If threads are free now, what is the new bottleneck?</h4><p>Everything downstream. Virtual threads will happily queue fifty thousand requests against a twenty-connection pool. Concurrency still has to be bounded somewhere — a <code>Semaphore</code> or a bulkhead in front of each dependency — you have just moved the limit off the thread pool, where it used to sit by accident.</p></div></div></div></article><article class="card" data-topic="Language" data-freq="3" data-search="what is a record, and when would you use one over a class? a transparent carrier for immutable data. the compiler derives the private final fields, the canonical constructor, the accessors (x(), not getx()), plus equals/hashcode/tostring from the component list. records are implicitly final and cannot extend a class.reach for one for dtos, api request/response types, value objects, map keys, and intermediate shapes inside a stream. do not use one for a jpa entity — those need a no-arg constructor and mutable state — or anywhere you need inheritance. record order(string id, list items) {
+
+    // compact constructor: validate and normalise — no parameter list, no assignments
+    order {
+        objects.requirenonnull(id);
+        items = list.copyof(items);           // defensive copy in
+    }
+
+    order(string id) { this(id, list.of()); }  // must delegate to the canonical constructor
+
+    double total() { return items.size() * 9.99; }   // ordinary methods are fine
+}
+
+// local records are excellent for stream intermediates:
+record sales(merchant merchant, double total) {}
+merchants.stream()
+         .map(m -&gt; new sales(m, revenue(m)))
+         .sorted(comparator.comparingdouble(sales::total).reversed())
+         .map(sales::merchant)
+         .tolist(); language" id="q2"><header class="c-head"><div class="c-meta"><span class="num">02</span><span class="topic">Language</span><span class="ver">Java 16</span><span class="freq" title="Asked almost every time"><i class="on"></i><i class="on"></i><i class="on"></i></span></div><h3 class="q">What is a record, and when would you use one over a class?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">A transparent carrier for immutable data. The compiler derives the private final fields, the canonical constructor, the accessors (<code>x()</code>, not <code>getX()</code>), plus <code>equals</code>/<code>hashCode</code>/<code>toString</code> from the component list. Records are implicitly final and cannot extend a class.<br><br>Reach for one for DTOs, API request/response types, value objects, map keys, and intermediate shapes inside a stream. Do <em>not</em> use one for a JPA entity — those need a no-arg constructor and mutable state — or anywhere you need inheritance.</p><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">java</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">record Order(String id, List&lt;String&gt; items) {
+
+    // compact constructor: validate and normalise — no parameter list, no assignments
+    Order {
+        Objects.requireNonNull(id);
+        items = List.copyOf(items);           // defensive copy IN
+    }
+
+    Order(String id) { this(id, List.of()); }  // must delegate to the canonical constructor
+
+    double total() { return items.size() * 9.99; }   // ordinary methods are fine
+}
+
+// Local records are excellent for stream intermediates:
+record Sales(Merchant merchant, double total) {}
+merchants.stream()
+         .map(m -&gt; new Sales(m, revenue(m)))
+         .sorted(Comparator.comparingDouble(Sales::total).reversed())
+         .map(Sales::merchant)
+         .toList();</code></pre></figure><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">The shallow-immutability trap</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">record Leaky(String id, List&lt;String&gt; items) {}
+
+List&lt;String&gt; mutable = new ArrayList&lt;&gt;(List.of(&quot;widget&quot;));
+var order = new Leaky(&quot;o1&quot;, mutable);
+mutable.add(&quot;SNEAKED IN&quot;);
+
+order.items();     // [widget, SNEAKED IN]   &lt;-- the record changed under you
+
+// With `items = List.copyOf(items);` in a compact constructor:
+//   order.items().add(&quot;nope&quot;)  -&gt;  UnsupportedOperationException</code></pre></figure><div class="fus"><div class="fu"><h4>Are records immutable?</h4><p><strong>Shallowly.</strong> The reference fields are final; what they point at need not be. This is the follow-up that catches people out — verified behaviour below. Defensively copy in the compact constructor, and if the component is still mutable, in the accessor too.</p></div><div class="fu"><h4>Records vs Lombok <code>@Value</code>?</h4><p>Records are a language feature: no annotation processor, no build-order surprises, semantics guaranteed by the spec, and — the real difference — they can be <em>destructured by record patterns</em>, which Lombok classes cannot. Lombok is still more flexible (builders, mutable <code>@Data</code>, partial generation).</p></div></div></div></article><article class="card" data-topic="Language" data-freq="3" data-search="how does pattern matching for switch change the way you write code? it lets a switch dispatch on the shape of a value, not just its constant value. you get type patterns as case labels, when guards, record patterns that destructure, and an explicit case null. in practice it replaces long if / else if (x instanceof …) chains and, very often, the visitor pattern.over a sealed type the switch is checked exhaustive, so you can drop default — and adding a new subtype then becomes a compile error in every switch that handles it, instead of silently falling through to a default branch. sealed interface shape permits circle, rect, group {}
+record point(int x, int y) {}
+record circle(point centre, double r) implements shape {}
+record rect(point topleft, point bottomright) implements shape {}
+record group(list members) implements shape {}
+
+string describe(object o) {
+    return switch (o) {
+        case null                       -&gt; &quot;nothing&quot;;
+        case circle c when c.r() &gt; 10   -&gt; &quot;big circle&quot;;                  // guard
+        case circle(point(var x, var y), var r) -&gt; &quot;circle at &quot; + x + &quot;,&quot; + y;   // nested destructuring
+        case rect r                     -&gt; &quot;rectangle&quot;;
+        case group(list members) -&gt; &quot;group of &quot; + members.size();
+        case string s                   -&gt; &quot;string of length &quot; + s.length();
+        default                         -&gt; &quot;unknown&quot;;
+    };
+}
+
+// exhaustive over the sealed type — no default, and a 4th shape breaks the build
+double area(shape s) {
+    return switch (s) {
+        case circle c -&gt; math.pi * c.r() * c.r();
+        case rect r   -&gt; width(r) * height(r);
+        case group g  -&gt; g.members().stream().maptodouble(this::area).sum();
+    };
+} language" id="q3"><header class="c-head"><div class="c-meta"><span class="num">03</span><span class="topic">Language</span><span class="ver">Java 21</span><span class="freq" title="Asked almost every time"><i class="on"></i><i class="on"></i><i class="on"></i></span></div><h3 class="q">How does pattern matching for switch change the way you write code?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">It lets a <code>switch</code> dispatch on the <em>shape</em> of a value, not just its constant value. You get type patterns as case labels, <code>when</code> guards, record patterns that destructure, and an explicit <code>case null</code>. In practice it replaces long <code>if / else if (x instanceof …)</code> chains and, very often, the visitor pattern.<br><br>Over a <strong>sealed</strong> type the switch is checked exhaustive, so you can drop <code>default</code> — and adding a new subtype then becomes a compile error in every switch that handles it, instead of silently falling through to a default branch.</p><div class="trap"><span class="trap-l">Gotcha</span><p>A pattern switch throws <code>NullPointerException</code> on a null selector unless you write <code>case null</code>. That is deliberate — it preserves the behaviour of every switch written before Java 21, so adding patterns to an existing switch does not silently change how nulls behave.</p></div><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">java</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">sealed interface Shape permits Circle, Rect, Group {}
+record Point(int x, int y) {}
+record Circle(Point centre, double r) implements Shape {}
+record Rect(Point topLeft, Point bottomRight) implements Shape {}
+record Group(List&lt;Shape&gt; members) implements Shape {}
+
+String describe(Object o) {
+    return switch (o) {
+        case null                       -&gt; &quot;nothing&quot;;
+        case Circle c when c.r() &gt; 10   -&gt; &quot;big circle&quot;;                  // guard
+        case Circle(Point(var x, var y), var r) -&gt; &quot;circle at &quot; + x + &quot;,&quot; + y;   // nested destructuring
+        case Rect r                     -&gt; &quot;rectangle&quot;;
+        case Group(List&lt;Shape&gt; members) -&gt; &quot;group of &quot; + members.size();
+        case String s                   -&gt; &quot;string of length &quot; + s.length();
+        default                         -&gt; &quot;unknown&quot;;
+    };
+}
+
+// Exhaustive over the sealed type — no default, and a 4th Shape breaks the build
+double area(Shape s) {
+    return switch (s) {
+        case Circle c -&gt; Math.PI * c.r() * c.r();
+        case Rect r   -&gt; width(r) * height(r);
+        case Group g  -&gt; g.members().stream().mapToDouble(this::area).sum();
+    };
+}</code></pre></figure><div class="fus"><div class="fu"><h4>When is a sealed interface plus a pattern switch better than polymorphism?</h4><p>This is the expression problem, and the honest answer names both sides. Polymorphism makes it cheap to add a new <em>type</em> and expensive to add a new <em>operation</em> across all types; a sealed hierarchy plus pattern matching inverts that. So: use polymorphism when the behaviour genuinely belongs to the data and new implementations arrive often. Use sealed + patterns when the set of types is closed and stable, and the operations keep multiplying — pricing rules, serialisation, rendering, anything a consumer defines rather than the data owner.</p></div></div></div></article><article class="card" data-topic="Language" data-freq="2" data-search="what problem do sealed classes solve? they let a type declare its complete set of permitted subtypes, so the compiler knows the hierarchy is closed. before this, an interface said &#x27;anyone may implement me&#x27; and there was no way to express &#x27;this value is one of exactly these three things&#x27;.two payoffs: exhaustiveness checking in switch, and a modelling vocabulary for closed domains — paymentmethod, result, an event union. every permitted subtype must itself be final, sealed, or explicitly non-sealed; there is no fourth option, and that is what makes the exhaustiveness check sound. sealed interface paymentmethod permits card, banktransfer, wallet {}
+
+record card(string pan, yearmonth expiry) implements paymentmethod {}
+record banktransfer(string iban)          implements paymentmethod {}
+record wallet(string provider, string id) implements paymentmethod {}
+
+// `permits` can be omitted when every subtype is in the same file
+sealed interface result {
+    record ok(t value)       implements result {}
+    record err(string cause) implements result {}
+}
+
+// non-sealed deliberately reopens one branch of the hierarchy
+sealed abstract class node permits leaf, branch {}
+final class leaf extends node {}
+non-sealed class branch extends node {}     // anyone may extend branch
+class twig extends branch {}                // ...and does language" id="q4"><header class="c-head"><div class="c-meta"><span class="num">04</span><span class="topic">Language</span><span class="ver">Java 17</span><span class="freq" title="Common"><i class="on"></i><i class="on"></i><i class=""></i></span></div><h3 class="q">What problem do sealed classes solve?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">They let a type declare its complete set of permitted subtypes, so the compiler knows the hierarchy is <em>closed</em>. Before this, an interface said 'anyone may implement me' and there was no way to express 'this value is one of exactly these three things'.<br><br>Two payoffs: exhaustiveness checking in switch, and a modelling vocabulary for closed domains — <code>PaymentMethod</code>, <code>Result</code>, an event union. Every permitted subtype must itself be <code>final</code>, <code>sealed</code>, or explicitly <code>non-sealed</code>; there is no fourth option, and that is what makes the exhaustiveness check sound.</p><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">java</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">sealed interface PaymentMethod permits Card, BankTransfer, Wallet {}
+
+record Card(String pan, YearMonth expiry) implements PaymentMethod {}
+record BankTransfer(String iban)          implements PaymentMethod {}
+record Wallet(String provider, String id) implements PaymentMethod {}
+
+// `permits` can be omitted when every subtype is in the same file
+sealed interface Result&lt;T&gt; {
+    record Ok&lt;T&gt;(T value)       implements Result&lt;T&gt; {}
+    record Err&lt;T&gt;(String cause) implements Result&lt;T&gt; {}
+}
+
+// non-sealed deliberately reopens one branch of the hierarchy
+sealed abstract class Node permits Leaf, Branch {}
+final class Leaf extends Node {}
+non-sealed class Branch extends Node {}     // anyone may extend Branch
+class Twig extends Branch {}                // ...and does</code></pre></figure><div class="fus"><div class="fu"><h4>What do you get from sealed types plus records?</h4><p>Algebraic data types: a sum type (the sealed interface) of product types (the records), consumed by an exhaustive pattern switch. That combination is the whole point of the language work from Java 14 to 21 — records (16), instanceof patterns (16), sealed classes (17), pattern switch and record patterns (21) are one feature delivered in five instalments.</p></div></div></div></article><article class="card" data-topic="Language" data-freq="2" data-search="what is flow scoping in instanceof pattern matching? the binding variable is in scope exactly where the compiler can prove the test succeeded — which is more places than people expect. it works on the right-hand side of &amp;amp;&amp;amp;, and it works after a negated test that returns early, because at that point the only way to still be executing is for the test to have passed. // before
+if (o instanceof string) {
+    string s = (string) o;
+    if (s.length() &gt; 5) { ... }
+}
+
+// after
+if (o instanceof string s &amp;&amp; s.length() &gt; 5) { ... }
+
+// flow scoping cuts both ways — s is in scope after the guard clause
+if (!(o instanceof string s)) return;
+system.out.println(s.length());
+
+// and equals() collapses to one line
+@override public boolean equals(object o) {
+    return o instanceof point p &amp;&amp; p.x == x &amp;&amp; p.y == y;
+} language" id="q5"><header class="c-head"><div class="c-meta"><span class="num">05</span><span class="topic">Language</span><span class="ver">Java 16</span><span class="freq" title="Common"><i class="on"></i><i class="on"></i><i class=""></i></span></div><h3 class="q">What is flow scoping in <code>instanceof</code> pattern matching?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">The binding variable is in scope exactly where the compiler can prove the test succeeded — which is more places than people expect. It works on the right-hand side of <code>&amp;&amp;</code>, and it works <em>after</em> a negated test that returns early, because at that point the only way to still be executing is for the test to have passed.</p><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">java</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">// before
+if (o instanceof String) {
+    String s = (String) o;
+    if (s.length() &gt; 5) { ... }
+}
+
+// after
+if (o instanceof String s &amp;&amp; s.length() &gt; 5) { ... }
+
+// flow scoping cuts both ways — s IS in scope after the guard clause
+if (!(o instanceof String s)) return;
+System.out.println(s.length());
+
+// and equals() collapses to one line
+@Override public boolean equals(Object o) {
+    return o instanceof Point p &amp;&amp; p.x == x &amp;&amp; p.y == y;
+}</code></pre></figure></div></article><article class="card" data-topic="Language" data-freq="2" data-search="switch expression versus switch statement — what actually changed? four things. the arrow form has no fall-through, so no missing-break bugs. a case can list multiple labels. the whole switch can be an expression that produces a value, with yield for block-bodied arms. and a switch expression must be exhaustive.the exhaustiveness point is the one worth making: over an enum or a sealed type, drop the default and the compiler will fail the build when someone adds a new constant. with a default in place, that same addition silently takes the default branch at runtime. // old form: four chances to forget a break
+int letters;
+switch (day) {
+    case monday:
+    case friday:  letters = 6; break;
+    case tuesday: letters = 7; break;
+    default: throw new illegalstateexception();
+}
+
+// expression form, exhaustive over the enum — deliberately no default
+int letters = switch (day) {
+    case monday, friday, sunday -&gt; 6;
+    case tuesday                -&gt; 7;
+    case thursday, saturday     -&gt; 8;
+    case wednesday              -&gt; 9;
+};
+
+// yield, for an arm that needs statements
+int value = switch (token) {
+    case &quot;add&quot; -&gt; 1;
+    default -&gt; {
+        int computed = lookup(token);
+        log.debug(&quot;resolved {} to {}&quot;, token, computed);
+        yield computed;                 // not `break computed;`
+    }
+}; language" id="q6"><header class="c-head"><div class="c-meta"><span class="num">06</span><span class="topic">Language</span><span class="ver">Java 14</span><span class="freq" title="Common"><i class="on"></i><i class="on"></i><i class=""></i></span></div><h3 class="q">Switch expression versus switch statement — what actually changed?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">Four things. The arrow form has <strong>no fall-through</strong>, so no missing-<code>break</code> bugs. A case can list <strong>multiple labels</strong>. The whole switch can be an <strong>expression that produces a value</strong>, with <code>yield</code> for block-bodied arms. And a switch expression must be <strong>exhaustive</strong>.<br><br>The exhaustiveness point is the one worth making: over an enum or a sealed type, drop the <code>default</code> and the compiler will fail the build when someone adds a new constant. With a <code>default</code> in place, that same addition silently takes the default branch at runtime.</p><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">java</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">// Old form: four chances to forget a break
+int letters;
+switch (day) {
+    case MONDAY:
+    case FRIDAY:  letters = 6; break;
+    case TUESDAY: letters = 7; break;
+    default: throw new IllegalStateException();
+}
+
+// Expression form, exhaustive over the enum — deliberately no default
+int letters = switch (day) {
+    case MONDAY, FRIDAY, SUNDAY -&gt; 6;
+    case TUESDAY                -&gt; 7;
+    case THURSDAY, SATURDAY     -&gt; 8;
+    case WEDNESDAY              -&gt; 9;
+};
+
+// yield, for an arm that needs statements
+int value = switch (token) {
+    case &quot;add&quot; -&gt; 1;
+    default -&gt; {
+        int computed = lookup(token);
+        log.debug(&quot;resolved {} to {}&quot;, token, computed);
+        yield computed;                 // not `break computed;`
+    }
+};</code></pre></figure></div></article><article class="card" data-topic="Language" data-freq="2" data-search="what does var do — is java dynamically typed now? no. it is compile-time local variable type inference. the variable has exactly one static type, fixed at the declaration and inferred from the initialiser; the compiled bytecode is identical to writing the type out. it works only for local variables with an initialiser, the index of an enhanced for, and try-with-resources — never for fields, parameters or return types. var list  = new arraylist();      // arraylist
+var stream = list.stream();               // stream
+for (var e : map.entryset()) { ... }      // map.entry
+try (var in = files.newinputstream(p)) { ... }
+
+// where it does not work — and why
+var x;                        // no initialiser: nothing to infer from
+var y = null;                 // null has no useful type
+var f = () -&gt; &quot;hi&quot;;           // a lambda needs a target type
+var a = { 1, 2, 3 };          // array initialiser needs a declared type
+class c { var field = 1; }    // locals only
+
+// the one genuinely surprising case: var captures the anonymous type
+var counter = new object() { int n; };
+counter.n++;                  // compiles — the inferred type has the member language" id="q7"><header class="c-head"><div class="c-meta"><span class="num">07</span><span class="topic">Language</span><span class="ver">Java 10</span><span class="freq" title="Common"><i class="on"></i><i class="on"></i><i class=""></i></span></div><h3 class="q">What does <code>var</code> do — is Java dynamically typed now?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">No. It is compile-time local variable type inference. The variable has exactly one static type, fixed at the declaration and inferred from the initialiser; the compiled bytecode is identical to writing the type out. It works only for local variables with an initialiser, the index of an enhanced <code>for</code>, and try-with-resources — never for fields, parameters or return types.</p><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">java</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">var list  = new ArrayList&lt;String&gt;();      // ArrayList&lt;String&gt;
+var stream = list.stream();               // Stream&lt;String&gt;
+for (var e : map.entrySet()) { ... }      // Map.Entry&lt;K,V&gt;
+try (var in = Files.newInputStream(p)) { ... }
+
+// Where it does not work — and why
+var x;                        // no initialiser: nothing to infer from
+var y = null;                 // null has no useful type
+var f = () -&gt; &quot;hi&quot;;           // a lambda needs a target type
+var a = { 1, 2, 3 };          // array initialiser needs a declared type
+class C { var field = 1; }    // locals only
+
+// The one genuinely surprising case: var captures the ANONYMOUS type
+var counter = new Object() { int n; };
+counter.n++;                  // compiles — the inferred type has the member</code></pre></figure><div class="fus"><div class="fu"><h4>When would you not use it?</h4><p>When the initialiser does not tell the reader the type — <code>var result = service.process(input)</code> is worse than the explicit form. Remember that code review happens in a diff, not in an IDE. Good uses: long generic types, obvious constructor calls, loop variables. Bad uses: hiding the difference between <code>int</code> and <code>long</code>, or between <code>List</code> and <code>ArrayList</code> when it matters.</p></div></div></div></article><article class="card" data-topic="Language" data-freq="1" data-search="how does indentation work inside a text block? the compiler strips incidental whitespace. it looks at every non-blank line and the line containing the closing delimiter, takes the minimum indentation across all of them, and removes that much from every line. so the position of the closing &quot;&quot;&quot; is what sets the left margin — which is the part people get wrong. string json = &quot;&quot;&quot;
+    {
+      &quot;name&quot;: &quot;java&quot;
+    }&quot;&quot;&quot;;              // closing &quot;&quot;&quot; on the content line -&gt; no leading spaces, no trailing newline
+
+string withnewline = &quot;&quot;&quot;
+    {
+      &quot;name&quot;: &quot;java&quot;
+    }
+    &quot;&quot;&quot;;               // closing &quot;&quot;&quot; on its own line -&gt; trailing newline included
+
+// two escapes that exist only in text blocks:
+string joined = &quot;&quot;&quot;
+    this line \
+    continues without a newline&quot;&quot;&quot;;
+string padded = &quot;&quot;&quot;
+    trailing space is kept \s
+    &quot;&quot;&quot;; language" id="q8"><header class="c-head"><div class="c-meta"><span class="num">08</span><span class="topic">Language</span><span class="ver">Java 15</span><span class="freq" title="Shows depth"><i class="on"></i><i class=""></i><i class=""></i></span></div><h3 class="q">How does indentation work inside a text block?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">The compiler strips <em>incidental</em> whitespace. It looks at every non-blank line <strong>and the line containing the closing delimiter</strong>, takes the minimum indentation across all of them, and removes that much from every line. So the position of the closing <code>"""</code> is what sets the left margin — which is the part people get wrong.</p><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">java</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">String json = &quot;&quot;&quot;
+    {
+      &quot;name&quot;: &quot;java&quot;
+    }&quot;&quot;&quot;;              // closing &quot;&quot;&quot; on the content line -&gt; no leading spaces, no trailing newline
+
+String withNewline = &quot;&quot;&quot;
+    {
+      &quot;name&quot;: &quot;java&quot;
+    }
+    &quot;&quot;&quot;;               // closing &quot;&quot;&quot; on its own line -&gt; trailing newline included
+
+// Two escapes that exist only in text blocks:
+String joined = &quot;&quot;&quot;
+    this line \
+    continues without a newline&quot;&quot;&quot;;
+String padded = &quot;&quot;&quot;
+    trailing space is kept \s
+    &quot;&quot;&quot;;</code></pre></figure></div></article><article class="card" data-topic="Language" data-freq="1" data-search="what is the foreign function &amp;amp; memory api, and what does it replace? the supported way to call native code and manage off-heap memory from pure java — it replaces jni (no c glue code, no separate build step) and sun.misc.unsafe&#x27;s memory access, which is deprecated for removal. final in java 22 after nine releases of incubation and preview.the safety mechanism worth naming is the arena: it gives a memory segment a deterministic lifetime, so touching a segment after its arena closes throws instead of corrupting the heap. linker linker = linker.nativelinker();
+methodhandle strlen = linker.downcallhandle(
+        linker.defaultlookup().find(&quot;strlen&quot;).orelsethrow(),
+        functiondescriptor.of(valuelayout.java_long, valuelayout.address));
+
+try (arena arena = arena.ofconfined()) {          // freed at close, deterministically
+    memorysegment str = arena.allocatefrom(&quot;hello, native world&quot;);
+    long len = (long) strlen.invokeexact(str);    // 19
+}
+// arena.ofconfined — one thread, explicit close   (most native calls)
+// arena.ofshared   — many threads, explicit close (shared buffers)
+// arena.ofauto     — gc-managed, cannot be closed
+// arena.global     — never freed
+
+// java 24+ requires an explicit opt-in for any native access:
+//   java --enable-native-access=all-unnamed -jar app.jar language" id="q9"><header class="c-head"><div class="c-meta"><span class="num">09</span><span class="topic">Language</span><span class="ver">Java 22</span><span class="freq" title="Shows depth"><i class="on"></i><i class=""></i><i class=""></i></span></div><h3 class="q">What is the Foreign Function &amp; Memory API, and what does it replace?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">The supported way to call native code and manage off-heap memory from pure Java — it replaces JNI (no C glue code, no separate build step) and <code>sun.misc.Unsafe</code>'s memory access, which is deprecated for removal. Final in Java 22 after nine releases of incubation and preview.<br><br>The safety mechanism worth naming is the <strong>Arena</strong>: it gives a memory segment a deterministic lifetime, so touching a segment after its arena closes throws instead of corrupting the heap.</p><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">java</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">Linker linker = Linker.nativeLinker();
+MethodHandle strlen = linker.downcallHandle(
+        linker.defaultLookup().find(&quot;strlen&quot;).orElseThrow(),
+        FunctionDescriptor.of(ValueLayout.JAVA_LONG, ValueLayout.ADDRESS));
+
+try (Arena arena = Arena.ofConfined()) {          // freed at close, deterministically
+    MemorySegment str = arena.allocateFrom(&quot;Hello, native world&quot;);
+    long len = (long) strlen.invokeExact(str);    // 19
+}
+// Arena.ofConfined — one thread, explicit close   (most native calls)
+// Arena.ofShared   — many threads, explicit close (shared buffers)
+// Arena.ofAuto     — GC-managed, cannot be closed
+// Arena.global     — never freed
+
+// Java 24+ requires an explicit opt-in for any native access:
+//   java --enable-native-access=ALL-UNNAMED -jar app.jar</code></pre></figure></div></article><article class="card" data-topic="Language" data-freq="1" data-search="what does &#x27;hello world&#x27; look like in java 25? two features finalised in 25 make this the shortest it has ever been: compact source files (no class declaration, instance main with no parameters, java.base implicitly imported, and a new java.lang.io class) and module import declarations.the motivation is teaching — you no longer have to explain public static void main(string[] args) before printing a line. worth knowing because it signals you follow the language, and because import module java.base is genuinely useful in scripts and tests. // hello.java — run it with:  java hello.java
+void main() {
+    io.println(&quot;hello, java 25&quot;);
+    var names = list.of(&quot;ada&quot;, &quot;grace&quot;);            // java.util, implicitly imported
+    io.println(names.stream().map(string::touppercase).tolist());
+} language" id="q10"><header class="c-head"><div class="c-meta"><span class="num">10</span><span class="topic">Language</span><span class="ver">Java 25</span><span class="freq" title="Shows depth"><i class="on"></i><i class=""></i><i class=""></i></span></div><h3 class="q">What does 'Hello World' look like in Java 25?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">Two features finalised in 25 make this the shortest it has ever been: <strong>compact source files</strong> (no class declaration, instance <code>main</code> with no parameters, <code>java.base</code> implicitly imported, and a new <code>java.lang.IO</code> class) and <strong>module import declarations</strong>.<br><br>The motivation is teaching — you no longer have to explain <code>public static void main(String[] args)</code> before printing a line. Worth knowing because it signals you follow the language, and because <code>import module java.base</code> is genuinely useful in scripts and tests.</p><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">java</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">// hello.java — run it with:  java hello.java
+void main() {
+    IO.println(&quot;Hello, Java 25&quot;);
+    var names = List.of(&quot;ada&quot;, &quot;grace&quot;);            // java.util, implicitly imported
+    IO.println(names.stream().map(String::toUpperCase).toList());
+}</code></pre></figure><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">Module imports, in a normal class</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">import module java.base;    // every package java.base exports, in one line
+
+public class Demo {
+    public static void main(String[] args) {
+        List&lt;String&gt; l = List.of(&quot;a&quot;);                    // java.util
+        var s = Stream.of(1, 2).map(String::valueOf).toList();   // java.util.stream
+        System.out.println(Instant.EPOCH + &quot; &quot; + Path.of(&quot;/tmp&quot;));
+    }
+}
+// Clashes (List in java.util vs java.awt) are an error;
+// resolve with an ordinary single-type import, which always wins.</code></pre></figure></div></article><article class="card" data-topic="Collections &amp; Streams" data-freq="3" data-search="difference between list.of(), arrays.aslist() and collections.unmodifiablelist()? three different things that all look immutable and are not.list.of() — genuinely immutable, fixed, and it rejects nulls. arrays.aslist() — a fixed-size view over the array: set() works and writes through to the array, add() throws, nulls are allowed. collections.unmodifiablelist() — an unmodifiable view over a mutable list: you cannot change it through that reference, but changes to the backing list show through. string[] arr = {&quot;a&quot;, &quot;b&quot;};
+list view = arrays.aslist(arr);
+view.set(0, &quot;changed&quot;);
+arr[0];                       // &quot;changed&quot;       backing = new arraylist&lt;&gt;(list.of(&quot;x&quot;));
+list unmod = collections.unmodifiablelist(backing);
+backing.add(&quot;y&quot;);
+unmod;                        // [x, y]         &lt;-- it is a view, not a snapshot
+
+list.copyof(backing);         // this is the immutable snapshot (java 10) collections &amp; streams" id="q11"><header class="c-head"><div class="c-meta"><span class="num">11</span><span class="topic">Collections &amp; Streams</span><span class="ver">Java 9</span><span class="freq" title="Asked almost every time"><i class="on"></i><i class="on"></i><i class="on"></i></span></div><h3 class="q">Difference between <code>List.of()</code>, <code>Arrays.asList()</code> and <code>Collections.unmodifiableList()</code>?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">Three different things that all look immutable and are not.<br><br><code>List.of()</code> — genuinely immutable, fixed, and it <strong>rejects nulls</strong>. <code>Arrays.asList()</code> — a fixed-size <em>view over the array</em>: <code>set()</code> works and writes through to the array, <code>add()</code> throws, nulls are allowed. <code>Collections.unmodifiableList()</code> — an unmodifiable <em>view over a mutable list</em>: you cannot change it through that reference, but changes to the backing list show through.</p><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">java</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">String[] arr = {&quot;a&quot;, &quot;b&quot;};
+List&lt;String&gt; view = Arrays.asList(arr);
+view.set(0, &quot;CHANGED&quot;);
+arr[0];                       // &quot;CHANGED&quot;      &lt;-- writes through to the array
+view.add(&quot;c&quot;);                // UnsupportedOperationException — fixed size
+Arrays.asList(&quot;a&quot;, null);     // fine — nulls allowed
+
+List.of(&quot;a&quot;).add(&quot;b&quot;);        // UnsupportedOperationException
+List.of(&quot;a&quot;, null);           // NullPointerException — nulls rejected outright
+
+List&lt;String&gt; backing = new ArrayList&lt;&gt;(List.of(&quot;x&quot;));
+List&lt;String&gt; unmod = Collections.unmodifiableList(backing);
+backing.add(&quot;y&quot;);
+unmod;                        // [x, y]         &lt;-- it is a view, not a snapshot
+
+List.copyOf(backing);         // THIS is the immutable snapshot (Java 10)</code></pre></figure><div class="fus"><div class="fu"><h4>Why does <code>List.of</code> reject nulls?</h4><p>It keeps the contract simple and permits optimisations, and a null inside an immutable collection is nearly always a bug. Related: <code>Map.of</code> iteration order is deliberately randomised per JVM run, so code that accidentally depends on it will fail in an obvious way rather than in production.</p></div></div></div></article><article class="card" data-topic="Collections &amp; Streams" data-freq="3" data-search="difference between stream.tolist() and collect(collectors.tolist())? tolist() (java 16) returns an unmodifiable list. collectors.tolist() makes no guarantee about the implementation, but in practice always returns a mutable arraylist. so the shorter form is not a drop-in replacement: migrating code that mutates the result will start throwing unsupportedoperationexception at runtime, not at compile time.if you need a mutable result, be explicit about it. list a = stream.tolist();                     // unmodifiable
+a.add(3);                                              // unsupportedoperationexception
+
+list b = stream.collect(collectors.tolist()); // mutable arraylist in practice
+b.add(3);                                              // fine
+
+// need mutability? say so:
+list c = stream.collect(collectors.tocollection(arraylist::new));
+
+// both tolist() and collectors.tolist() permit nulls;
+// collectors.tounmodifiablelist() does not. collections &amp; streams" id="q12"><header class="c-head"><div class="c-meta"><span class="num">12</span><span class="topic">Collections &amp; Streams</span><span class="ver">Java 16</span><span class="freq" title="Asked almost every time"><i class="on"></i><i class="on"></i><i class="on"></i></span></div><h3 class="q">Difference between <code>stream.toList()</code> and <code>collect(Collectors.toList())</code>?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a"><code>toList()</code> (Java 16) returns an <strong>unmodifiable</strong> list. <code>Collectors.toList()</code> makes no guarantee about the implementation, but in practice always returns a mutable <code>ArrayList</code>. So the shorter form is not a drop-in replacement: migrating code that mutates the result will start throwing <code>UnsupportedOperationException</code> at runtime, not at compile time.<br><br>If you need a mutable result, be explicit about it.</p><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">java</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">List&lt;Integer&gt; a = stream.toList();                     // unmodifiable
+a.add(3);                                              // UnsupportedOperationException
+
+List&lt;Integer&gt; b = stream.collect(Collectors.toList()); // mutable ArrayList in practice
+b.add(3);                                              // fine
+
+// Need mutability? Say so:
+List&lt;Integer&gt; c = stream.collect(Collectors.toCollection(ArrayList::new));
+
+// Both toList() and Collectors.toList() permit nulls;
+// Collectors.toUnmodifiableList() does NOT.</code></pre></figure></div></article><article class="card" data-topic="Collections &amp; Streams" data-freq="2" data-search="what has been added to stream and optional since java 8? worth knowing because most people&#x27;s stream vocabulary stopped at java 8. the additions fall into three groups: short-circuiting operations that filter could not express, terminal conveniences, and — in java 24 — a genuine extension point. // java 9 — takewhile/dropwhile short-circuit on an ordered stream.
+//   filter scans everything; takewhile stops at the first failure.
+stream.of(1,2,9,3).filter(i -&gt; i  i  i  i  i * 2).tolist(); // a functional for-loop
+stream.ofnullable(maybenull);                        // 0 or 1 elements, never an npe
+
+// java 12 — teeing: two collectors, one pass
+var summary = orders.stream().collect(collectors.teeing(
+        collectors.summingdouble(order::total),
+        collectors.counting(),
+        (sum, n) -&gt; new summary(sum, n)));
+
+// java 16 — tolist(), and mapmulti (a push-style flatmap with no intermediate stream)
+// java 9  — optional
+opt.or(() -&gt; optional.of(fallback));
+opt.ifpresentorelse(this::use, this::logmissing);
+list.stream().map(this::find).flatmap(optional::stream).tolist();   // flatten optionals
+opt.isempty(); collections &amp; streams" id="q13"><header class="c-head"><div class="c-meta"><span class="num">13</span><span class="topic">Collections &amp; Streams</span><span class="ver">Java 9–24</span><span class="freq" title="Common"><i class="on"></i><i class="on"></i><i class=""></i></span></div><h3 class="q">What has been added to Stream and Optional since Java 8?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">Worth knowing because most people's stream vocabulary stopped at Java 8. The additions fall into three groups: short-circuiting operations that <code>filter</code> could not express, terminal conveniences, and — in Java 24 — a genuine extension point.</p><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">java</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">// Java 9 — takeWhile/dropWhile short-circuit on an ORDERED stream.
+//   filter scans everything; takeWhile stops at the first failure.
+Stream.of(1,2,9,3).filter(i -&gt; i &lt; 5).toList();      // [1, 2, 3]
+Stream.of(1,2,9,3).takeWhile(i -&gt; i &lt; 5).toList();   // [1, 2]
+Stream.of(1,2,9,3).dropWhile(i -&gt; i &lt; 5).toList();   // [9, 3]
+
+Stream.iterate(1, i -&gt; i &lt; 20, i -&gt; i * 2).toList(); // a functional for-loop
+Stream.ofNullable(maybeNull);                        // 0 or 1 elements, never an NPE
+
+// Java 12 — teeing: two collectors, ONE pass
+var summary = orders.stream().collect(Collectors.teeing(
+        Collectors.summingDouble(Order::total),
+        Collectors.counting(),
+        (sum, n) -&gt; new Summary(sum, n)));
+
+// Java 16 — toList(), and mapMulti (a push-style flatMap with no intermediate Stream)
+// Java 9  — Optional
+opt.or(() -&gt; Optional.of(fallback));
+opt.ifPresentOrElse(this::use, this::logMissing);
+list.stream().map(this::find).flatMap(Optional::stream).toList();   // flatten Optionals
+opt.isEmpty();</code></pre></figure></div></article><article class="card" data-topic="Collections &amp; Streams" data-freq="2" data-search="what are sequenced collections, and why did they take 25 years? java has had ordered collections since 1.2 with no common way to ask for the first or last element: list.get(0), deque.getfirst(), sortedset.first(), and for linkedhashset you had to take an iterator. java 21 retrofits three interfaces — sequencedcollection, sequencedset, sequencedmap — onto the existing types with a uniform api, including reversed(). sequencedcollection sc = new arraylist&lt;&gt;(list.of(&quot;a&quot;,&quot;b&quot;,&quot;c&quot;));
+sc.addfirst(&quot;start&quot;);
+sc.getfirst();  sc.getlast();  sc.removelast();
+sc.reversed();                        // a live view, not a copy
+
+sequencedmap sm = new linkedhashmap&lt;&gt;();
+sm.putfirst(&quot;a&quot;, 1);
+sm.firstentry();  sm.polllastentry();
+sm.sequencedkeyset();  sm.reversed();
+
+// reversed() is a view — this catches people out:
+var list = new arraylist&lt;&gt;(list.of(&quot;a&quot;,&quot;b&quot;,&quot;c&quot;));
+var rev  = list.reversed();
+list.addlast(&quot;d&quot;);
+rev;                                  // [d, c, b, a]
+
+// and sortedset/sortedmap are sequenced, so position is not yours to choose:
+new treeset&lt;&gt;(list.of(&quot;a&quot;)).addfirst(&quot;z&quot;);   // unsupportedoperationexception collections &amp; streams" id="q14"><header class="c-head"><div class="c-meta"><span class="num">14</span><span class="topic">Collections &amp; Streams</span><span class="ver">Java 21</span><span class="freq" title="Common"><i class="on"></i><i class="on"></i><i class=""></i></span></div><h3 class="q">What are sequenced collections, and why did they take 25 years?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">Java has had ordered collections since 1.2 with no common way to ask for the first or last element: <code>list.get(0)</code>, <code>deque.getFirst()</code>, <code>sortedSet.first()</code>, and for <code>LinkedHashSet</code> you had to take an iterator. Java 21 retrofits three interfaces — <code>SequencedCollection</code>, <code>SequencedSet</code>, <code>SequencedMap</code> — onto the existing types with a uniform API, including <code>reversed()</code>.</p><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">java</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">SequencedCollection&lt;String&gt; sc = new ArrayList&lt;&gt;(List.of(&quot;a&quot;,&quot;b&quot;,&quot;c&quot;));
+sc.addFirst(&quot;start&quot;);
+sc.getFirst();  sc.getLast();  sc.removeLast();
+sc.reversed();                        // a live VIEW, not a copy
+
+SequencedMap&lt;String,Integer&gt; sm = new LinkedHashMap&lt;&gt;();
+sm.putFirst(&quot;a&quot;, 1);
+sm.firstEntry();  sm.pollLastEntry();
+sm.sequencedKeySet();  sm.reversed();
+
+// reversed() is a view — this catches people out:
+var list = new ArrayList&lt;&gt;(List.of(&quot;a&quot;,&quot;b&quot;,&quot;c&quot;));
+var rev  = list.reversed();
+list.addLast(&quot;d&quot;);
+rev;                                  // [d, c, b, a]
+
+// And SortedSet/SortedMap are sequenced, so position is not yours to choose:
+new TreeSet&lt;&gt;(List.of(&quot;a&quot;)).addFirst(&quot;z&quot;);   // UnsupportedOperationException</code></pre></figure></div></article><article class="card" data-topic="Collections &amp; Streams" data-freq="1" data-search="what are stream gatherers? custom intermediate stream operations — the extension point stream never had. collector could only terminate a pipeline, so windowing, running totals and stateful de-duplication had to be done outside the stream. gatherer fixes that. final in java 24 after two previews. stream.of(1,2,3,4,5,6,7).gather(gatherers.windowfixed(3)).tolist();
+// [[1, 2, 3], [4, 5, 6], [7]]
+
+stream.of(1,2,3,4,5).gather(gatherers.windowsliding(2)).tolist();
+// [[1, 2], [2, 3], [3, 4], [4, 5]]
+
+stream.of(1,2,3,4).gather(gatherers.scan(() -&gt; 0, integer::sum)).tolist();
+// [1, 3, 6, 10]                          running totals
+
+stream.of(1,2,3,4)
+      .gather(gatherers.mapconcurrent(4, id -&gt; callslowservice(id)))   // 4 virtual threads,
+      .tolist();                                                       // order preserved
+
+// distinct-by-key, which stream has never had:
+static  gatherer distinctby(function key) {
+    return gatherer.ofsequential(hashset::new,
+        gatherer.integrator.ofgreedy((seen, element, downstream) -&gt;
+            !seen.add(key.apply(element)) || downstream.push(element)));
+}
+people.stream().gather(distinctby(person::email)).tolist(); collections &amp; streams" id="q15"><header class="c-head"><div class="c-meta"><span class="num">15</span><span class="topic">Collections &amp; Streams</span><span class="ver">Java 24</span><span class="freq" title="Shows depth"><i class="on"></i><i class=""></i><i class=""></i></span></div><h3 class="q">What are stream gatherers?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">Custom <strong>intermediate</strong> stream operations — the extension point <code>Stream</code> never had. <code>Collector</code> could only terminate a pipeline, so windowing, running totals and stateful de-duplication had to be done outside the stream. <code>Gatherer</code> fixes that. Final in Java 24 after two previews.</p><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">java</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">Stream.of(1,2,3,4,5,6,7).gather(Gatherers.windowFixed(3)).toList();
+// [[1, 2, 3], [4, 5, 6], [7]]
+
+Stream.of(1,2,3,4,5).gather(Gatherers.windowSliding(2)).toList();
+// [[1, 2], [2, 3], [3, 4], [4, 5]]
+
+Stream.of(1,2,3,4).gather(Gatherers.scan(() -&gt; 0, Integer::sum)).toList();
+// [1, 3, 6, 10]                          running totals
+
+Stream.of(1,2,3,4)
+      .gather(Gatherers.mapConcurrent(4, id -&gt; callSlowService(id)))   // 4 virtual threads,
+      .toList();                                                       // order preserved
+
+// distinct-by-key, which Stream has never had:
+static &lt;T, K&gt; Gatherer&lt;T, ?, T&gt; distinctBy(Function&lt;T, K&gt; key) {
+    return Gatherer.ofSequential(HashSet&lt;K&gt;::new,
+        Gatherer.Integrator.ofGreedy((seen, element, downstream) -&gt;
+            !seen.add(key.apply(element)) || downstream.push(element)));
+}
+people.stream().gather(distinctBy(Person::email)).toList();</code></pre></figure></div></article><article class="card" data-topic="Concurrency" data-freq="2" data-search="do virtual threads make completablefuture obsolete? no, but the default flips. if you reached for completablefuture purely to avoid blocking a scarce thread, that reason is gone — plain blocking code on a virtual thread is simpler, and gives you real stack traces and working debuggers, which async pipelines never did.completablefuture is still the right tool for composing results that arrive independently, and for apis that are genuinely non-blocking underneath. for the common fan-out / fan-in case, structured concurrency expresses it more clearly and handles cancellation for you. // completablefuture — composition, and it still reads fine
+var combined = completablefuture.supplyasync(() -&gt; fetchuser(id))
+        .thencombine(completablefuture.supplyasync(() -&gt; fetchorders(id)), profile::new)
+        .ortimeout(2, timeunit.seconds);
+
+// structured concurrency (preview in 25) — same fan-out, clearer failure semantics:
+// a failing subtask cancels its siblings, and the scope cannot be outlived.
+try (var scope = structuredtaskscope.open()) {
+    var user   = scope.fork(() -&gt; fetchuser(id));
+    var orders = scope.fork(() -&gt; fetchorders(id));
+    scope.join();
+    return new profile(user.get(), orders.get());
+} concurrency" id="q16"><header class="c-head"><div class="c-meta"><span class="num">16</span><span class="topic">Concurrency</span><span class="ver">Java 21–25</span><span class="freq" title="Common"><i class="on"></i><i class="on"></i><i class=""></i></span></div><h3 class="q">Do virtual threads make <code>CompletableFuture</code> obsolete?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">No, but the default flips. If you reached for <code>CompletableFuture</code> purely to avoid blocking a scarce thread, that reason is gone — plain blocking code on a virtual thread is simpler, and gives you real stack traces and working debuggers, which async pipelines never did.<br><br><code>CompletableFuture</code> is still the right tool for composing results that arrive independently, and for APIs that are genuinely non-blocking underneath. For the common fan-out / fan-in case, structured concurrency expresses it more clearly and handles cancellation for you.</p><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">java</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">// CompletableFuture — composition, and it still reads fine
+var combined = CompletableFuture.supplyAsync(() -&gt; fetchUser(id))
+        .thenCombine(CompletableFuture.supplyAsync(() -&gt; fetchOrders(id)), Profile::new)
+        .orTimeout(2, TimeUnit.SECONDS);
+
+// Structured concurrency (preview in 25) — same fan-out, clearer failure semantics:
+// a failing subtask cancels its siblings, and the scope cannot be outlived.
+try (var scope = StructuredTaskScope.open()) {
+    var user   = scope.fork(() -&gt; fetchUser(id));
+    var orders = scope.fork(() -&gt; fetchOrders(id));
+    scope.join();
+    return new Profile(user.get(), orders.get());
+}</code></pre></figure></div></article><article class="card" data-topic="Concurrency" data-freq="2" data-search="what replaces threadlocal in a virtual-thread world? scoped values, final in java 25 after four previews. a scoped value is immutable and has a bounded lifetime: it is bound only for the duration of a run() or call(), so there is nothing to leak and no remove() to forget in a finally block. with a million threads, that difference is the entire argument. static final scopedvalue request_id = scopedvalue.newinstance();
+
+void handle(request req) {
+    scopedvalue.where(request_id, req.id())
+               .run(() -&gt; process(req));       // bound for exactly this long
+}
+
+void deepinthecallstack() {
+    log.info(&quot;[{}] working&quot;, request_id.get());   // no parameter threading
+}
+
+request_id.isbound();        // false outside any scope
+request_id.orelse(&quot;none&quot;);   // safe read
+request_id.get();            // nosuchelementexception outside a scope concurrency" id="q17"><header class="c-head"><div class="c-meta"><span class="num">17</span><span class="topic">Concurrency</span><span class="ver">Java 25</span><span class="freq" title="Common"><i class="on"></i><i class="on"></i><i class=""></i></span></div><h3 class="q">What replaces <code>ThreadLocal</code> in a virtual-thread world?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a"><strong>Scoped values</strong>, final in Java 25 after four previews. A scoped value is immutable and has a bounded lifetime: it is bound only for the duration of a <code>run()</code> or <code>call()</code>, so there is nothing to leak and no <code>remove()</code> to forget in a finally block. With a million threads, that difference is the entire argument.</p><div class="trap"><span class="trap-l">Gotcha</span><p>Inheritance is narrower than it was during preview. Only subtasks forked from a <code>StructuredTaskScope</code> inherit bindings — a task submitted to a plain <code>newVirtualThreadPerTaskExecutor()</code> does <strong>not</strong> (verified on JDK 25.0.3: the child sees an unbound value). A lot of blog posts still say otherwise.</p></div><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">java</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">static final ScopedValue&lt;String&gt; REQUEST_ID = ScopedValue.newInstance();
+
+void handle(Request req) {
+    ScopedValue.where(REQUEST_ID, req.id())
+               .run(() -&gt; process(req));       // bound for exactly this long
+}
+
+void deepInTheCallStack() {
+    log.info(&quot;[{}] working&quot;, REQUEST_ID.get());   // no parameter threading
+}
+
+REQUEST_ID.isBound();        // false outside any scope
+REQUEST_ID.orElse(&quot;none&quot;);   // safe read
+REQUEST_ID.get();            // NoSuchElementException outside a scope</code></pre></figure></div></article><article class="card" data-topic="Runtime &amp; JVM" data-freq="2" data-search="which garbage collector would you choose, and what changed since java 8? answer by workload rather than by naming a favourite.g1 — the default since java 9, and the right answer for most services: balanced, tunable with one knob. zgc — large heaps or strict latency budgets; pauses stay sub-millisecond regardless of heap size, generational since 21 and the only mode since 23. serial — small containers, low core counts, short-lived jobs; frequently the best choice and almost always forgotten. parallel — pure batch throughput where pauses do not matter.the change that bites on upgrade is that java 8 defaulted to parallel and java 9 defaults to g1, so old tuning flags are now being applied to a different collector. -xx:+useg1gc -xx:maxgcpausemillis=200      # default since 9; the target is a goal, not a guarantee
+-xx:+usezgc                                # sub-ms pauses; generational and the only mode from 23
+-xx:+useserialgc                           # small container, short-lived job
+-xx:+useshenandoahgc -xx:shenandoahgcmode=generational   # java 25
+
+# in a container, size the heap against the limit, not the host:
+-xx:maxrampercentage=75
+
+# all the java 8 logging flags were replaced by one grammar in java 9:
+-xlog:gc*=debug:file=gc.log:time,uptime:filecount=5,filesize=10m runtime &amp; jvm" id="q18"><header class="c-head"><div class="c-meta"><span class="num">18</span><span class="topic">Runtime &amp; JVM</span><span class="ver">Java 9–25</span><span class="freq" title="Common"><i class="on"></i><i class="on"></i><i class=""></i></span></div><h3 class="q">Which garbage collector would you choose, and what changed since Java 8?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">Answer by workload rather than by naming a favourite.<br><br><strong>G1</strong> — the default since Java 9, and the right answer for most services: balanced, tunable with one knob. <strong>ZGC</strong> — large heaps or strict latency budgets; pauses stay sub-millisecond regardless of heap size, generational since 21 and the only mode since 23. <strong>Serial</strong> — small containers, low core counts, short-lived jobs; frequently the best choice and almost always forgotten. <strong>Parallel</strong> — pure batch throughput where pauses do not matter.<br><br>The change that bites on upgrade is that Java 8 defaulted to Parallel and Java 9 defaults to G1, so old tuning flags are now being applied to a different collector.</p><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">bash</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-bash">-XX:+UseG1GC -XX:MaxGCPauseMillis=200      # default since 9; the target is a goal, not a guarantee
+-XX:+UseZGC                                # sub-ms pauses; generational and the only mode from 23
+-XX:+UseSerialGC                           # small container, short-lived job
+-XX:+UseShenandoahGC -XX:ShenandoahGCMode=generational   # Java 25
+
+# In a container, size the heap against the LIMIT, not the host:
+-XX:MaxRAMPercentage=75
+
+# All the Java 8 logging flags were replaced by one grammar in Java 9:
+-Xlog:gc*=debug:file=gc.log:time,uptime:filecount=5,filesize=10M</code></pre></figure><div class="fus"><div class="fu"><h4>What else changed in the runtime between 9 and 25?</h4><p>Compact strings (9) roughly halved the footprint of Latin-1 strings. Unified <code>-Xlog</code> (9) replaced every ad-hoc logging flag. Container awareness (10) stopped the JVM sizing its heap against the host. Application CDS (10/13) and then the <strong>AOT cache</strong> (24/25) cut startup. <strong>Compact object headers</strong> (25) shrink every object header from 96–128 bits to 64.</p></div></div></div></article><article class="card" data-topic="Runtime &amp; JVM" data-freq="2" data-search="what is worth upgrading from java 21 to 25 for? very little of it is syntax — the case is startup, memory and finished concurrency primitives.aot cache (jep 483/514/515): a training run records class loading, linking and method profiles, and later runs map that in. commonly 30–40% faster startup on framework-heavy applications for no source change. compact object headers (jep 519): typically 10–20% smaller live sets. scoped values go final. and jep 491 in java 24 removed virtual-thread pinning on synchronized, which is the single most useful fix for anyone who adopted virtual threads on 21. # one command to train and write the cache (java 25)
+java -xx:aotcacheoutput=app.aot -cp app.jar main
+
+# every subsequent run
+java -xx:aotcache=app.aot -cp app.jar main
+java -xx:+usecompactobjectheaders -jar app.jar
+
+# confirm the cache is actually being used
+java -xx:aotcache=app.aot -xlog:aot=info -cp app.jar main
+#   [0.004s][info][aot] opened aot cache app.aot. runtime &amp; jvm" id="q19"><header class="c-head"><div class="c-meta"><span class="num">19</span><span class="topic">Runtime &amp; JVM</span><span class="ver">Java 25</span><span class="freq" title="Common"><i class="on"></i><i class="on"></i><i class=""></i></span></div><h3 class="q">What is worth upgrading from Java 21 to 25 for?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">Very little of it is syntax — the case is startup, memory and finished concurrency primitives.<br><br><strong>AOT cache</strong> (JEP 483/514/515): a training run records class loading, linking and method profiles, and later runs map that in. Commonly 30–40% faster startup on framework-heavy applications for no source change. <strong>Compact object headers</strong> (JEP 519): typically 10–20% smaller live sets. <strong>Scoped values</strong> go final. And <strong>JEP 491 in Java 24 removed virtual-thread pinning on <code>synchronized</code></strong>, which is the single most useful fix for anyone who adopted virtual threads on 21.</p><div class="trap"><span class="trap-l">Gotcha</span><p>The AOT cache is tied to the exact JDK build, class path and flags. Generate it in the same build step that produces the artefact and treat it as a build output — do not commit it.</p></div><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">bash</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-bash"># One command to train and write the cache (Java 25)
+java -XX:AOTCacheOutput=app.aot -cp app.jar Main
+
+# Every subsequent run
+java -XX:AOTCache=app.aot -cp app.jar Main
+java -XX:+UseCompactObjectHeaders -jar app.jar
+
+# Confirm the cache is actually being used
+java -XX:AOTCache=app.aot -Xlog:aot=info -cp app.jar Main
+#   [0.004s][info][aot] Opened AOT cache app.aot.</code></pre></figure></div></article><article class="card" data-topic="Runtime &amp; JVM" data-freq="2" data-search="what is the module system, and have you actually used it? be honest here, because most interviewers know the answer. very few applications modularise their own code; the jdk modularised, and what you feel downstream is strong encapsulation — internal jdk classes stopped being reachable, which is the source of most 8&amp;nbsp;→&amp;nbsp;11 pain.the mechanics: module-info.java declares requires (what i need), exports (what others may use), and opens (what may be reflected into). anything not exported is inaccessible at compile and run time. the real payoff, when you take it, is jlink. module com.example.orders {
+    requires java.sql;
+    requires transitive com.example.model;   // re-export: my consumers get this too
+
+    exports com.example.orders.api;          // public surface
+    exports com.example.orders.spi to com.example.app;   // qualified: one consumer only
+
+    opens com.example.orders.dto to com.fasterxml.jackson.databind;   // deep reflection
+} runtime &amp; jvm" id="q20"><header class="c-head"><div class="c-meta"><span class="num">20</span><span class="topic">Runtime &amp; JVM</span><span class="ver">Java 9</span><span class="freq" title="Common"><i class="on"></i><i class="on"></i><i class=""></i></span></div><h3 class="q">What is the module system, and have you actually used it?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">Be honest here, because most interviewers know the answer. Very few applications modularise their own code; the <em>JDK</em> modularised, and what you feel downstream is <strong>strong encapsulation</strong> — internal JDK classes stopped being reachable, which is the source of most 8&nbsp;→&nbsp;11 pain.<br><br>The mechanics: <code>module-info.java</code> declares <code>requires</code> (what I need), <code>exports</code> (what others may use), and <code>opens</code> (what may be reflected into). Anything not exported is inaccessible at compile <em>and</em> run time. The real payoff, when you take it, is <code>jlink</code>.</p><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">java</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">module com.example.orders {
+    requires java.sql;
+    requires transitive com.example.model;   // re-export: my consumers get this too
+
+    exports com.example.orders.api;          // public surface
+    exports com.example.orders.spi to com.example.app;   // qualified: one consumer only
+
+    opens com.example.orders.dto to com.fasterxml.jackson.databind;   // deep reflection
+}</code></pre></figure><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">What you actually hit in practice</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-bash"># Find your exposure BEFORE upgrading from 8
+jdeps --jdk-internals app.jar
+
+# The only supported escape hatches from Java 17 on
+--add-opens   java.base/java.lang=ALL-UNNAMED
+--add-exports java.base/sun.nio.ch=ALL-UNNAMED
+
+# The payoff, if you do modularise: a 55MB runtime instead of a 330MB JDK
+jlink --add-modules com.example.orders --output runtime --strip-debug</code></pre></figure><div class="fus"><div class="fu"><h4>Why did upgrading from 8 to 11 break everyone's build?</h4><p>Two reasons. JEP 320 removed the Java EE modules, so <code>javax.xml.bind</code> (JAXB), <code>javax.annotation</code> and <code>javax.activation</code> vanished — they are now ordinary Jakarta dependencies. And reflective access into JDK internals started warning in 9 and <strong>throwing by default in 16</strong>.</p></div></div></div></article><article class="card" data-topic="Migration" data-freq="3" data-search="we&#x27;re on java 8 (or 11, or 17). make the case for upgrading, and tell me what breaks. answer per jump, because the risk profile is completely different at each step. the order below is by how much trouble you should budget for.  migration" id="q21"><header class="c-head"><div class="c-meta"><span class="num">21</span><span class="topic">Migration</span><span class="ver">Java 8–25</span><span class="freq" title="Asked almost every time"><i class="on"></i><i class="on"></i><i class="on"></i></span></div><h3 class="q">We're on Java 8 (or 11, or 17). Make the case for upgrading, and tell me what breaks.</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">Answer per jump, because the risk profile is completely different at each step. The order below is by how much trouble you should budget for.</p><div class="tablewrap"><table class="jumps"><tbody><tr><td class="j">8 → 11</td><td class="jt">The hard one</td><td>Java EE modules removed (JAXB, <code>javax.annotation</code>, <code>javax.activation</code>) — add the Jakarta artifacts. Reflective access into JDK internals starts warning. Every GC logging flag replaced by <code>-Xlog</code>, so the JVM may refuse to start. Default GC changes from Parallel to G1. <code>java.version</code> format changes.</td></tr><tr><td class="j">11 → 17</td><td class="jt">Mostly mechanical</td><td><code>--illegal-access=permit</code> was removed, so every opening must be named explicitly with <code>--add-opens</code> / <code>--add-exports</code>. Reflection that only warned on 11 now throws. In return you get records, sealed classes, instanceof patterns, text blocks and switch expressions all permanent.</td></tr><tr><td class="j">17 → 21</td><td class="jt">Low risk, highest reward</td><td>Almost nothing breaks. You get virtual threads, pattern matching for switch, record patterns and sequenced collections. This is the jump with the best ratio in the whole list. One gotcha: <code>Stream.toList()</code> returns an immutable list.</td></tr><tr><td class="j">21 → 25</td><td class="jt">Startup and memory</td><td>AOT cache, compact object headers, generational Shenandoah, scoped values final, and virtual-thread pinning on <code>synchronized</code> fixed in 24. Native access must now be declared with <code>--enable-native-access</code>.</td></tr></tbody></table></div><div class="fus"><div class="fu"><h4>How would you de-risk it?</h4><p>Run the new JDK before you compile for it — the JVM is far more backward-compatible than the toolchain, so start by running your existing Java 8 artefact on 21 and fixing what falls over. Then move the compiler target. Use the readiness flags in CI: <code>--sun-misc-unsafe-memory-access=deny</code>, <code>--illegal-native-access=deny</code>, <code>--finalization=disabled</code> — each one tells you today what a future release will enforce.</p></div></div></div></article><article class="card" data-topic="Migration" data-freq="1" data-search="have you used string templates? a trick question if the interviewer is current, and a good one to get right. string templates were previewed in java 21 and 22 and then withdrawn entirely in java 23 — the first time a java language preview has been abandoned outright. the design had not converged on how the processor is selected or how templates interact with the type system. nothing has been targeted since.the broader point this tests: know the difference between final, preview and incubating. a preview feature needs --enable-preview, can change or vanish, and produces class files pinned to the exact release that compiled them — it does not belong in production. // java 21/22 preview only — removed in 23, no replacement shipped
+string s = str.&quot;hello \{name}!&quot;;
+
+// what to use instead, today:
+&quot;hello %s!&quot;.formatted(name);
+string.format(&quot;hello %s!&quot;, name); migration" id="q22"><header class="c-head"><div class="c-meta"><span class="num">22</span><span class="topic">Migration</span><span class="ver">Java 23</span><span class="freq" title="Shows depth"><i class="on"></i><i class=""></i><i class=""></i></span></div><h3 class="q">Have you used string templates?</h3><button class="reveal" type="button" aria-expanded="true">Hide answer</button></header><div class="answer"><p class="a">A trick question if the interviewer is current, and a good one to get right. String templates were previewed in Java 21 and 22 and then <strong>withdrawn entirely in Java 23</strong> — the first time a Java language preview has been abandoned outright. The design had not converged on how the processor is selected or how templates interact with the type system. Nothing has been targeted since.<br><br>The broader point this tests: know the difference between <em>final</em>, <em>preview</em> and <em>incubating</em>. A preview feature needs <code>--enable-preview</code>, can change or vanish, and produces class files pinned to the exact release that compiled them — it does not belong in production.</p><figure class="codeblock"><figcaption class="cb-bar"><span class="cb-lang">java</span><button class="cb-copy" type="button">Copy</button></figcaption><pre><code class="lang-java">// Java 21/22 preview only — REMOVED in 23, no replacement shipped
+String s = STR.&quot;Hello \{name}!&quot;;
+
+// What to use instead, today:
+&quot;Hello %s!&quot;.formatted(name);
+String.format(&quot;Hello %s!&quot;, name);</code></pre></figure><div class="fus"><div class="fu"><h4>What is still in preview or incubating in Java 25?</h4><p>Preview: stable values, structured concurrency (fifth preview), primitive types in patterns (third), PEM encodings. Incubating: the Vector API, now in its <em>tenth</em> incubator round — it is waiting on Project Valhalla's value classes.</p></div></div></div></article></div>
+
+  <section class="rapid">
+    <h2>Rapid fire</h2>
+    <p>One-line answers for the last twenty minutes before the call.</p>
+    <div class="rfs"><div class="rf"><p class="rq">Which Java versions are LTS?</p><p class="ra">8, 11, 17, 21, 25 — a new one every two years since 17.</p></div><div class="rf"><p class="rq">Records: <code>getX()</code> or <code>x()</code>?</p><p class="ra"><code>x()</code>. The component name, no <code>get</code> prefix.</p></div><div class="rf"><p class="rq">Can a record extend a class?</p><p class="ra">No. Records are implicitly final and already extend <code>java.lang.Record</code>. They can implement interfaces.</p></div><div class="rf"><p class="rq">Is <code>var</code> a keyword?</p><p class="ra">No — it is a reserved type name, so a variable or method called <code>var</code> still compiles.</p></div><div class="rf"><p class="rq">What is the default GC?</p><p class="ra">G1, since Java 9. Java 8 defaulted to Parallel.</p></div><div class="rf"><p class="rq">Default charset?</p><p class="ra">UTF-8 everywhere since Java 18, regardless of the OS locale.</p></div><div class="rf"><p class="rq">Does a switch expression need a <code>default</code>?</p><p class="ra">Only if it is not already exhaustive. Over an enum or a sealed type, omit it deliberately so new subtypes break the build.</p></div><div class="rf"><p class="rq">What does <code>sealed</code> require of its subtypes?</p><p class="ra">Each must be <code>final</code>, <code>sealed</code>, or <code>non-sealed</code>. No fourth option.</p></div><div class="rf"><p class="rq">Virtual thread stack size?</p><p class="ra">It has no fixed stack — the continuation lives on the heap and grows as needed. Roughly a kilobyte to start, against ~1&nbsp;MB for a platform thread.</p></div><div class="rf"><p class="rq">How many carrier threads by default?</p><p class="ra"><code>Runtime.availableProcessors()</code>, in a dedicated ForkJoinPool. Tune with <code>jdk.virtualThreadScheduler.parallelism</code>.</p></div><div class="rf"><p class="rq">Is <code>Stream.toList()</code> mutable?</p><p class="ra">No. <code>Collectors.toList()</code> is, in practice — that is the migration gotcha.</p></div><div class="rf"><p class="rq">Does <code>reversed()</code> copy?</p><p class="ra">No, it returns a live view. Changes to the original show through.</p></div><div class="rf"><p class="rq">What does <code>Optional.stream()</code> do?</p><p class="ra">Yields zero or one element, so <code>flatMap(Optional::stream)</code> flattens a stream of Optionals.</p></div><div class="rf"><p class="rq">Which release removed the Security Manager?</p><p class="ra">Permanently disabled in Java 24; deprecated for removal back in 17.</p></div><div class="rf"><p class="rq">What happened to <code>sun.misc.Unsafe</code>?</p><p class="ra">Memory-access methods deprecated in 23, warn at runtime in 24. Replacements: <code>VarHandle</code> (9) and the FFM API (22).</p></div><div class="rf"><p class="rq">Text block: what sets the left margin?</p><p class="ra">The minimum indentation across all non-blank lines <em>and</em> the closing delimiter line.</p></div></div>
+  </section>
+
+  <div class="foot">
+    <p>Every code sample here was compiled and run on OpenJDK 25.0.3 before publishing — including the gotchas,
+    which are shown with their real output rather than from memory.</p>
+    <p class="kbd">Press <code>/</code> to search · <code>Esc</code> to clear</p>
+  </div>
+</div>
+<script>(function(){
+  var KW = ("abstract assert boolean break byte case catch char class const continue default do double else enum "+
+    "extends final finally float for goto if implements import instanceof int interface long native new package "+
+    "private protected public return short static strictfp super switch synchronized this throw throws transient "+
+    "try void volatile while var yield record sealed permits non-sealed module requires exports opens uses provides "+
+    "to with transitive open true false null when").split(" ");
+  var KWSET={}; KW.forEach(function(k){KWSET[k]=1;});
+  var TB = String.fromCharCode(34,34,34);
+  var JAVA_RE = new RegExp([
+    '(\\/\\*[\\s\\S]*?\\*\\/|\\/\\/[^\\n]*|#[^\\n]*)',
+    '('+TB+'[\\s\\S]*?'+TB+'|"(?:\\\\.|[^"\\\\\\n])*"|\'(?:\\\\.|[^\'\\\\\\n])*\')',
+    '(@[A-Za-z_]\\w*)',
+    '(\\b[A-Za-z_$][\\w$]*\\b)',
+    '(\\b\\d[\\d_]*(?:\\.[\\d_]+)?[LlFfDd]?\\b)'
+  ].join('|'),'g');
+  var SH_RE = new RegExp([
+    '(#[^\\n]*)',
+    '("(?:\\\\.|[^"\\\\\\n])*")',
+    '(^\\s*(?:\\$\\s*)?(?:java|javac|jar|jlink|jpackage|jdeps|jshell|jcmd|jfr)\\b)',
+    '(\\s--?[A-Za-z][\\w:.-]*|\\s-XX:[+\\-]?[\\w:=.%]*)'
+  ].join('|'),'gm');
+  function esc(s){return s.replace(/[&<>]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;'}[c];});}
+  function run(src,re,map){
+    var out='',last=0,m; re.lastIndex=0;
+    while((m=re.exec(src))!==null){ out+=esc(src.slice(last,m.index)); out+=map(m); last=re.lastIndex; }
+    return out+esc(src.slice(last));
+  }
+  document.querySelectorAll('.codeblock code').forEach(function(c){
+    var lang=(c.className.match(/lang-(\w+)/)||[])[1]||'java', txt=c.textContent;
+    if(lang==='java'){
+      c.innerHTML = run(txt, JAVA_RE, function(m){
+        if(m[1]) return '<span class="tok-com">'+esc(m[1])+'</span>';
+        if(m[2]) return '<span class="tok-str">'+esc(m[2])+'</span>';
+        if(m[3]) return '<span class="tok-ann">'+esc(m[3])+'</span>';
+        if(m[4]) return KWSET[m[4]] ? '<span class="tok-kw">'+m[4]+'</span>'
+               : (/^[A-Z][A-Za-z0-9_$]*$/.test(m[4]) ? '<span class="tok-type">'+m[4]+'</span>' : m[4]);
+        return '<span class="tok-num">'+esc(m[5])+'</span>';
+      });
+    } else if(lang==='bash'){
+      c.innerHTML = run(txt, SH_RE, function(m){
+        if(m[1]) return '<span class="tok-com">'+esc(m[1])+'</span>';
+        if(m[2]) return '<span class="tok-str">'+esc(m[2])+'</span>';
+        if(m[3]) return '<span class="tok-kw">'+esc(m[3])+'</span>';
+        return '<span class="tok-num">'+esc(m[4])+'</span>';
+      });
+    } else {
+      c.innerHTML = esc(txt).replace(/(\/\/[^\n]*|#[^\n]*)/g,'<span class="tok-com">$1</span>');
+    }
+  });
+
+  document.querySelectorAll('.cb-copy').forEach(function(b){
+    b.addEventListener('click',function(){
+      var t=b.closest('.codeblock').querySelector('code').textContent;
+      navigator.clipboard.writeText(t).then(function(){
+        b.textContent='Copied'; b.classList.add('done');
+        setTimeout(function(){b.textContent='Copy'; b.classList.remove('done');},1300);
+      },function(){ b.textContent='Press ⌘C'; setTimeout(function(){b.textContent='Copy';},1300); });
+    });
+  });
+
+  var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+  function setCard(card, open){
+    card.classList.toggle('collapsed', !open);
+    var b = card.querySelector('.reveal');
+    b.textContent = open ? 'Hide answer' : 'Show answer';
+    b.setAttribute('aria-expanded', String(open));
+  }
+  cards.forEach(function(card){
+    card.querySelector('.reveal').addEventListener('click',function(){
+      setCard(card, card.classList.contains('collapsed'));
+    });
+  });
+  var allBtn = document.getElementById('toggleAll'), hidden=false;
+  allBtn.addEventListener('click',function(){
+    hidden = !hidden;
+    cards.forEach(function(c){ setCard(c, !hidden); });
+    allBtn.textContent = hidden ? 'Show all answers' : 'Hide all answers';
+    allBtn.setAttribute('aria-pressed', String(hidden));
+  });
+
+  var search=document.getElementById('search'), counter=document.getElementById('count');
+  var chips=Array.prototype.slice.call(document.querySelectorAll('.chip')), active=null;
+  function apply(){
+    var q=(search.value||'').trim().toLowerCase(), shown=0;
+    cards.forEach(function(c){
+      var ok=true;
+      if(active && c.dataset.topic!==active) ok=false;
+      if(ok && q && c.dataset.search.indexOf(q)===-1) ok=false;
+      c.classList.toggle('hidden',!ok);
+      if(ok) shown++;
+    });
+    counter.textContent = shown+' / 22';
+  }
+  search.addEventListener('input',apply);
+  chips.forEach(function(ch){
+    ch.addEventListener('click',function(){
+      active = (active===ch.dataset.topic) ? null : ch.dataset.topic;
+      chips.forEach(function(x){ x.setAttribute('aria-pressed', String(x.dataset.topic===active)); });
+      apply();
+    });
+  });
+  document.addEventListener('keydown',function(e){
+    if(e.key==='/' && document.activeElement!==search){ e.preventDefault(); search.focus(); }
+    if(e.key==='Escape' && document.activeElement===search){ search.value=''; apply(); search.blur(); }
+  });
+  apply();
+})();
+</script>
